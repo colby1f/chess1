@@ -9,10 +9,17 @@ public class PawnMoveFinder implements ChessMoveFinder {
 
         List<ChessMove> availableMoves = new ArrayList<>();
 
+        ChessPiece.PieceType[] promotionTypes = {
+                ChessPiece.PieceType.QUEEN,
+                ChessPiece.PieceType.ROOK,
+                ChessPiece.PieceType.BISHOP,
+                ChessPiece.PieceType.KNIGHT
+        };
+
         int promotion = 8;
         int movement = 1;
         int twoMove = 2;
-        if (pieceColor == ChessGame.TeamColor.BLACK){
+        if (pieceColor == ChessGame.TeamColor.BLACK) {
             promotion = 1;
             movement = -1;
             twoMove = 7;
@@ -23,17 +30,16 @@ public class PawnMoveFinder implements ChessMoveFinder {
         ChessPosition leftDiagonal = new ChessPosition(position.getRow() + movement, position.getColumn() - 1);
         ChessPosition rightDiagonal = new ChessPosition(position.getRow() + movement, position.getColumn() + 1);
 
-        if (board.getPiece(oneForward) == null){
-            if(oneForward.getRow() == 8){
-                availableMoves.add(new ChessMove(position, oneForward, ChessPiece.PieceType.QUEEN));
-                availableMoves.add(new ChessMove(position, oneForward, ChessPiece.PieceType.ROOK));
-                availableMoves.add(new ChessMove(position, oneForward, ChessPiece.PieceType.BISHOP));
-                availableMoves.add(new ChessMove(position, oneForward, ChessPiece.PieceType.KNIGHT));
-            } else{
+        if (board.getPiece(oneForward) == null) {
+            if (oneForward.getRow() == 8) {
+                for (ChessPiece.PieceType promotionType : promotionTypes) {
+                    availableMoves.add(new ChessMove(position, oneForward, promotionType));
+                }
+            } else {
                 availableMoves.add(new ChessMove(position, oneForward, null));
             }
 
-            if(board.getPiece(twoForward) == null && position.getRow() == twoMove){
+            if (board.getPiece(twoForward) == null && position.getRow() == twoMove) {
                 availableMoves.add(new ChessMove(position, twoForward, null));
             }
         }
@@ -41,10 +47,9 @@ public class PawnMoveFinder implements ChessMoveFinder {
         if (leftDiagonal.getColumn() >= 1) {
             if (board.getPiece(leftDiagonal) == null) {
                 if (leftDiagonal.getRow() == 8) {
-                    availableMoves.add(new ChessMove(position, leftDiagonal, ChessPiece.PieceType.QUEEN));
-                    availableMoves.add(new ChessMove(position, leftDiagonal, ChessPiece.PieceType.ROOK));
-                    availableMoves.add(new ChessMove(position, leftDiagonal, ChessPiece.PieceType.BISHOP));
-                    availableMoves.add(new ChessMove(position, leftDiagonal, ChessPiece.PieceType.KNIGHT));
+                    for (ChessPiece.PieceType promotionType : promotionTypes) {
+                        availableMoves.add(new ChessMove(position, oneForward, promotionType));
+                    }
                 } else {
                     availableMoves.add(new ChessMove(position, leftDiagonal, null));
                 }
@@ -54,10 +59,9 @@ public class PawnMoveFinder implements ChessMoveFinder {
         if (rightDiagonal.getColumn() >= 1) {
             if (board.getPiece(rightDiagonal) == null) {
                 if (rightDiagonal.getRow() == 8) {
-                    availableMoves.add(new ChessMove(position, rightDiagonal, ChessPiece.PieceType.QUEEN));
-                    availableMoves.add(new ChessMove(position, rightDiagonal, ChessPiece.PieceType.ROOK));
-                    availableMoves.add(new ChessMove(position, rightDiagonal, ChessPiece.PieceType.BISHOP));
-                    availableMoves.add(new ChessMove(position, rightDiagonal, ChessPiece.PieceType.KNIGHT));
+                    for (ChessPiece.PieceType promotionType : promotionTypes) {
+                        availableMoves.add(new ChessMove(position, oneForward, promotionType));
+                    }
                 } else {
                     availableMoves.add(new ChessMove(position, rightDiagonal, null));
                 }
