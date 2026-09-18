@@ -13,7 +13,7 @@ public class PawnMoveFinder implements ChessMoveFinder {
                 ChessPiece.PieceType.QUEEN,
                 ChessPiece.PieceType.ROOK,
                 ChessPiece.PieceType.BISHOP,
-                ChessPiece.PieceType.KNIGHT
+                ChessPiece.PieceType.KNIGHT,
         };
 
         int promotion = 8;
