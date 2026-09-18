@@ -1,5 +1,7 @@
 package chess;
 
+import java.util.List;
+
 public interface ChessMoveFinder {
-    ChessMove[] pieceMoves(ChessBoard board, ChessPosition position);
+    List<ChessMove> pieceMoves(ChessBoard board, ChessPosition position);
 }
