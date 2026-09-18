@@ -11,9 +11,11 @@ public class PawnMoveFinder implements ChessMoveFinder {
 
         int promotion = 8;
         int movement = 1;
+        int twoMove = 2;
         if (pieceColor == ChessGame.TeamColor.BLACK){
             promotion = 1;
             movement = -1;
+            twoMove = 7;
         }
 
         ChessPosition oneForward = new ChessPosition(position.getRow() + movement, position.getColumn());
@@ -31,7 +33,7 @@ public class PawnMoveFinder implements ChessMoveFinder {
                 availableMoves.add(new ChessMove(position, oneForward, null));
             }
 
-            if(board.getPiece(twoForward) == null){
+            if(board.getPiece(twoForward) == null && position.getRow() == twoMove){
                 availableMoves.add(new ChessMove(position, twoForward, null));
             }
         }
