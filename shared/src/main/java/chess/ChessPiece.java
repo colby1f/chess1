@@ -73,6 +73,10 @@ public class ChessPiece {
             ChessMoveFinder moveFinder = new QueenMoveFinder();
             return moveFinder.pieceMoves(board, myPosition);
         }
+        if (pieceType == PieceType.KING) {
+            ChessMoveFinder moveFinder = new KingMoveFinder();
+            return moveFinder.pieceMoves(board, myPosition);
+        }
 
         return null;
     }
