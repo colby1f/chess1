@@ -13,7 +13,7 @@ public class RookMoveFinder implements ChessMoveFinder {
 
         for (int[] dir : directions) {
             for (int distance = 1; distance < 8; distance++) {
-                ChessPosition newPosition = new ChessPosition(position.getRow() + (dir[0] * distance), position.getColumn() + dir[1] * distance);
+                ChessPosition newPosition = new ChessPosition(position.getRow() + (dir[0] * distance), position.getColumn() + (dir[1] * distance));
                 if (newPosition.getRow() > 8 || newPosition.getRow() < 1 || newPosition.getColumn() > 8 || newPosition.getColumn() < 1) {
                     break;
                 }
