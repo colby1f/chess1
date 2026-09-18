@@ -38,9 +38,10 @@ public class PawnMoveFinder implements ChessMoveFinder {
             } else {
                 availableMoves.add(new ChessMove(position, oneForward, null));
             }
-
-            if (board.getPiece(twoForward) == null && position.getRow() == twoMove) {
-                availableMoves.add(new ChessMove(position, twoForward, null));
+            if (position.getRow() == twoMove) {
+                if (board.getPiece(twoForward) == null) {
+                    availableMoves.add(new ChessMove(position, twoForward, null));
+                }
             }
         }
 
@@ -49,7 +50,7 @@ public class PawnMoveFinder implements ChessMoveFinder {
                 if (board.getPiece(leftDiagonal).getTeamColor() != pieceColor) {
                     if (leftDiagonal.getRow() == promotion) {
                         for (ChessPiece.PieceType promotionType : promotionTypes) {
-                            availableMoves.add(new ChessMove(position, oneForward, promotionType));
+                            availableMoves.add(new ChessMove(position, leftDiagonal, promotionType));
                         }
                     } else {
                         availableMoves.add(new ChessMove(position, leftDiagonal, null));
@@ -63,7 +64,7 @@ public class PawnMoveFinder implements ChessMoveFinder {
                 if (board.getPiece(rightDiagonal).getTeamColor() != pieceColor) {
                     if (rightDiagonal.getRow() == promotion) {
                         for (ChessPiece.PieceType promotionType : promotionTypes) {
-                            availableMoves.add(new ChessMove(position, oneForward, promotionType));
+                            availableMoves.add(new ChessMove(position, rightDiagonal, promotionType));
                         }
                     } else {
                         availableMoves.add(new ChessMove(position, rightDiagonal, null));
