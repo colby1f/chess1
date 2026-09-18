@@ -31,7 +31,7 @@ public class PawnMoveFinder implements ChessMoveFinder {
         ChessPosition rightDiagonal = new ChessPosition(position.getRow() + movement, position.getColumn() + 1);
 
         if (board.getPiece(oneForward) == null) {
-            if (oneForward.getRow() == 8) {
+            if (oneForward.getRow() == promotion) {
                 for (ChessPiece.PieceType promotionType : promotionTypes) {
                     availableMoves.add(new ChessMove(position, oneForward, promotionType));
                 }
@@ -46,7 +46,7 @@ public class PawnMoveFinder implements ChessMoveFinder {
 
         if (leftDiagonal.getColumn() >= 1) {
             if (board.getPiece(leftDiagonal) == null) {
-                if (leftDiagonal.getRow() == 8) {
+                if (leftDiagonal.getRow() == promotion) {
                     for (ChessPiece.PieceType promotionType : promotionTypes) {
                         availableMoves.add(new ChessMove(position, oneForward, promotionType));
                     }
@@ -56,9 +56,9 @@ public class PawnMoveFinder implements ChessMoveFinder {
             }
         }
 
-        if (rightDiagonal.getColumn() >= 1) {
+        if (rightDiagonal.getColumn() <= 8) {
             if (board.getPiece(rightDiagonal) == null) {
-                if (rightDiagonal.getRow() == 8) {
+                if (rightDiagonal.getRow() == promotion) {
                     for (ChessPiece.PieceType promotionType : promotionTypes) {
                         availableMoves.add(new ChessMove(position, oneForward, promotionType));
                     }
