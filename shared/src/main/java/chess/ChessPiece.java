@@ -81,6 +81,10 @@ public class ChessPiece {
             ChessMoveFinder moveFinder = new KnightMoveFinder();
             return moveFinder.pieceMoves(board, myPosition);
         }
+        if (pieceType == PieceType.PAWN) {
+            ChessMoveFinder moveFinder = new PawnMoveFinder();
+            return moveFinder.pieceMoves(board, myPosition);
+        }
 
 
         return null;
