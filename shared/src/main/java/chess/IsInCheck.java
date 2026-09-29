@@ -10,7 +10,7 @@ public class IsInCheck {
      * @param teamColor which team to check for check
      * @return True if the specified team is in check
      */
-    public boolean isInCheck (ChessBoard board, ChessGame.TeamColor teamColor) {
+    public boolean checkFinder(ChessBoard board, ChessGame.TeamColor teamColor) {
 
         // finds kings position
         ChessPosition kingPosition;
