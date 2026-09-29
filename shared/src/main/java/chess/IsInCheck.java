@@ -41,10 +41,12 @@ public class IsInCheck {
         pawnMoves.add(new ChessPosition(kingPosition.getRow() + dir, kingPosition.getColumn() + 1));
         pawnMoves.add(new ChessPosition(kingPosition.getRow() + dir, kingPosition.getColumn() - 1));
         for (ChessPosition move : pawnMoves) {
-            ChessPiece otherPiece = board.getPiece(move);
-            if (otherPiece != null) {
-                if (otherPiece.getPieceType() == ChessPiece.PieceType.PAWN && otherPiece.getTeamColor() != teamColor) {
-                    return true;
+            if (move.getRow() <= 8 && move.getRow() >= 1 && move.getColumn() <= 8 && move.getColumn() >= 1) {
+                ChessPiece otherPiece = board.getPiece(move);
+                if (otherPiece != null) {
+                    if (otherPiece.getPieceType() == ChessPiece.PieceType.PAWN && otherPiece.getTeamColor() != teamColor) {
+                        return true;
+                    }
                 }
             }
         }
