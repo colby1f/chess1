@@ -66,7 +66,7 @@ public class IsInCheck {
         }
 
         // checks if the king is in check diagonally to a bishop or queen
-        ChessMoveFinder bishopMoveFinder = new RookMoveFinder();
+        ChessMoveFinder bishopMoveFinder = new BishopMoveFinder();
         List<ChessMove> bishopMoves = bishopMoveFinder.pieceMoves(board, kingPosition);
         for (ChessMove move : bishopMoves) {
             ChessPiece otherPiece = board.getPiece(move.getEndPosition());
