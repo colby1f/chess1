@@ -63,8 +63,22 @@ public class IsInCheck {
             }
         }
 
+        // checks if the king is in check diagonally to a bishop or queen
+        ChessMoveFinder bishopMoveFinder = new RookMoveFinder();
+        List<ChessMove> bishopMoves = bishopMoveFinder.pieceMoves(board, kingPosition);
+        for (ChessMove move : bishopMoves) {
+            ChessPiece otherPiece = board.getPiece(move.getEndPosition());
+            if (otherPiece != null) {
+                if (otherPiece.getPieceType() == ChessPiece.PieceType.BISHOP || otherPiece.getPieceType() == ChessPiece.PieceType.QUEEN) {
+                    if (otherPiece.getTeamColor() != teamColor) {
+                        return true;
+                    }
+                }
+            }
+        }
 
 
+        // if not in check returns false
         return false;
     }
 }
