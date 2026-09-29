@@ -53,13 +53,7 @@ public class ChessPiece {
      * @return Collection of valid moves
      */
     public Collection<ChessMove> pieceMoves(ChessBoard board, ChessPosition myPosition) {
-        ChessPiece piece = board.getPiece(myPosition);
-
-        if (piece == null) {
-            return null;
-        }
-
-        ChessPiece.PieceType pieceType = piece.getPieceType();
+        ChessPiece.PieceType pieceType = type;
 
         if (pieceType == PieceType.ROOK) {
             ChessMoveFinder moveFinder = new RookMoveFinder();
