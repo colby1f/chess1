@@ -1,5 +1,6 @@
 package chess;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class IsInCheck {
@@ -10,6 +11,8 @@ public class IsInCheck {
      * @return True if the specified team is in check
      */
     public boolean isInCheck (ChessBoard board, ChessGame.TeamColor teamColor) {
+
+        // finds kings position
         ChessPosition kingPosition;
         if (teamColor == ChessGame.TeamColor.WHITE) {
             kingPosition = board.getWhiteKingPosition();
@@ -17,7 +20,7 @@ public class IsInCheck {
             kingPosition = board.getBlackKingPosition();
         }
 
-
+        // checks if the king is in check to a knight
         ChessMoveFinder knightMoveFinder = new KnightMoveFinder();
         List<ChessMove> knightMoves = knightMoveFinder.pieceMoves(board, kingPosition);
         for (ChessMove move : knightMoves) {
@@ -29,8 +32,22 @@ public class IsInCheck {
             }
         }
 
-
-
+        // checks if the king is in check to a pawn
+        List<ChessPosition> pawnMoves = new ArrayList<>();
+        int dir = 1;
+        if (teamColor == ChessGame.TeamColor.BLACK) {
+            dir = -1;
+        }
+        pawnMoves.add(new ChessPosition(kingPosition.getRow() + dir, kingPosition.getColumn() + 1));
+        pawnMoves.add(new ChessPosition(kingPosition.getRow() + dir, kingPosition.getColumn() - 1));
+        for (ChessPosition move : pawnMoves) {
+            ChessPiece otherPiece = board.getPiece(move);
+            if (otherPiece != null) {
+                if (otherPiece.getPieceType() == ChessPiece.PieceType.PAWN && otherPiece.getTeamColor() != teamColor) {
+                    return true;
+                }
+            }
+        }
 
 
 
