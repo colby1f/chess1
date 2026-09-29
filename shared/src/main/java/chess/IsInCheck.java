@@ -49,6 +49,20 @@ public class IsInCheck {
             }
         }
 
+        // checks if the king is in check horizontally to a rook or queen
+        ChessMoveFinder rookMoveFinder = new RookMoveFinder();
+        List<ChessMove> rookMoves = rookMoveFinder.pieceMoves(board, kingPosition);
+        for (ChessMove move : rookMoves) {
+            ChessPiece otherPiece = board.getPiece(move.getEndPosition());
+            if (otherPiece != null) {
+                if (otherPiece.getPieceType() == ChessPiece.PieceType.ROOK || otherPiece.getPieceType() == ChessPiece.PieceType.QUEEN) {
+                    if (otherPiece.getTeamColor() != teamColor) {
+                        return true;
+                    }
+                }
+            }
+        }
+
 
 
         return false;
