@@ -45,17 +45,6 @@ public class ChessGame {
         BLACK
     }
 
-    /**
-     * Gets all valid moves for a piece at the given location
-     *
-     * @param startPosition the piece to get valid moves for
-     * @return Set of valid moves for requested piece, or null if no piece at
-     * startPosition
-     */
-    public Collection<ChessMove> validMoves(ChessPosition startPosition) {
-        ValidMoveFinder validMove = new ValidMoveFinder();
-        return validMove.validMoves(this, board, startPosition);
-    }
 
     /**
      * Makes a move in the chess game
@@ -64,16 +53,6 @@ public class ChessGame {
      * @throws InvalidMoveException if move is invalid
      */
     public void makeMove(ChessMove move) throws InvalidMoveException {
-        throw new RuntimeException("Not implemented");
-    }
-
-    /**
-     * Determines if the given team is in check
-     *
-     * @param teamColor which team to check for check
-     * @return True if the specified team is in check
-     */
-    public boolean isInCheck(TeamColor teamColor) {
         throw new RuntimeException("Not implemented");
     }
 
