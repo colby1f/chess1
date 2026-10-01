@@ -14,7 +14,6 @@ public class ValidMoveFinder {
     public Collection<ChessMove> validMoves(ChessGame game, ChessPosition startPosition) {
 
         ChessBoard board = game.getBoard();
-
         ChessPiece piece = board.getPiece(startPosition);
 
         if (piece == null || piece.getTeamColor() != game.getTeamTurn()) {
@@ -27,6 +26,7 @@ public class ValidMoveFinder {
 
         for (ChessMove move : potentialMoves) {
             ChessBoard newBoard = new ChessBoard(board);
+
             MoveMaker moveMaker = new MoveMaker();
             newBoard = moveMaker.moveMaker(move, newBoard);
 
