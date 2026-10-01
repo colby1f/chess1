@@ -8,6 +8,10 @@ public class MoveMaker {
 
         ChessPiece piece = board.getPiece(startPosition);
 
+        if (move.getPromotionPiece() != null) {
+            piece = new ChessPiece(piece.getTeamColor(), move.getPromotionPiece());
+        }
+
         board.addPiece(startPosition, null);
         board.addPiece(endPosition, piece);
 
