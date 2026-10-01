@@ -21,6 +21,12 @@ public class ChessBoard {
         blackKingPosition = null;
     }
 
+    public ChessBoard(ChessBoard other) {
+        this.board = other.board;
+        this.whiteKingPosition = other.whiteKingPosition;
+        this.blackKingPosition = other.blackKingPosition;
+    }
+
     /**
      * Adds a chess piece to the chessboard
      *

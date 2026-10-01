@@ -54,7 +54,8 @@ public class ChessGame {
      * startPosition
      */
     public Collection<ChessMove> validMoves(ChessPosition startPosition) {
-        throw new RuntimeException("Not implemented");
+        ValidMoveFinder availableMoves = new ValidMoveFinder();
+        return availableMoves.validMoves(this, board, startPosition);
     }
 
 
@@ -65,7 +66,8 @@ public class ChessGame {
      * @throws InvalidMoveException if move is invalid
      */
     public void makeMove(ChessMove move) throws InvalidMoveException {
-        throw new RuntimeException("Not implemented");
+        MoveMaker moveMaker = new MoveMaker();
+        moveMaker.moveMaker(move, board, teamTurn);
     }
 
     /**

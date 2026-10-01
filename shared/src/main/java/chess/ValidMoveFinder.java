@@ -11,7 +11,7 @@ public class ValidMoveFinder {
      * @return Set of valid moves for requested piece, or null if no piece at
      * startPosition
      */
-    public Collection<ChessMove> validMoves(ChessGame game, ChessBoard board, ChessPosition startPosition) {
+    public Collection<ChessMove> validMoves(ChessGame game, ChessBoard board, ChessPosition startPosition, ChessGame.TeamColor teamTurn) {
 
         ChessPiece piece = board.getPiece(startPosition);
 
@@ -20,7 +20,21 @@ public class ValidMoveFinder {
         }
 
         Collection<ChessMove> potentialMoves = piece.pieceMoves(board, startPosition);
-        Collection<ChessMove> availableMoves = new ArrayList<>();
+        Collection<ChessMove> legalMoves = new ArrayList<>();
+
+        for (ChessMove move : potentialMoves) {
+            ChessBoard newBoard = new ChessBoard(board);
+            MoveMaker moveMaker = new MoveMaker();
+            newBoard = moveMaker.moveMaker(move, newBoard);
+
+            IsInCheck isInCheck = new IsInCheck();
+            if (!isInCheck.checkFinder(newBoard, teamTurn)) {
+                legalMoves.add(move);
+            }
+
+
+        return legalMoves;
+        }
 
 
 
