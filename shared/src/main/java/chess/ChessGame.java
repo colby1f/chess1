@@ -68,6 +68,11 @@ public class ChessGame {
     public void makeMove(ChessMove move) throws InvalidMoveException {
         MoveMaker moveMaker = new MoveMaker();
         board = moveMaker.moveMaker(move, board);
+        if (teamTurn == TeamColor.WHITE) {
+            teamTurn = TeamColor.BLACK;
+        } else {
+            teamTurn = TeamColor.WHITE;
+        }
     }
 
     /**
