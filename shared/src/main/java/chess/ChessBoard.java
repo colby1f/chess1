@@ -22,7 +22,12 @@ public class ChessBoard {
     }
 
     public ChessBoard(ChessBoard other) {
-        this.board = other.board;
+        board = new ChessPiece[8][8];
+        for (int row = 0; row <= 7; row++) {
+            for (int col = 0; col <= 7; col++) {
+                this.board[row][col] = other.getPiece(new ChessPosition(row + 1, col + 1));
+            }
+        }
         this.whiteKingPosition = other.whiteKingPosition;
         this.blackKingPosition = other.blackKingPosition;
     }

@@ -66,12 +66,20 @@ public class ChessGame {
      * @throws InvalidMoveException if move is invalid
      */
     public void makeMove(ChessMove move) throws InvalidMoveException {
-        MoveMaker moveMaker = new MoveMaker();
-        board = moveMaker.moveMaker(move, board);
-        if (teamTurn == TeamColor.WHITE) {
-            teamTurn = TeamColor.BLACK;
-        } else {
-            teamTurn = TeamColor.WHITE;
+        try {
+            if (validMoves(move.getStartPosition()).contains(move)) {
+                MoveMaker moveMaker = new MoveMaker();
+                board = moveMaker.moveMaker(move, board);
+                if (teamTurn == TeamColor.WHITE) {
+                    teamTurn = TeamColor.BLACK;
+                } else {
+                    teamTurn = TeamColor.WHITE;
+                }
+            } else {
+                throw new InvalidMoveException("Illegal Move");
+            }
+        } catch (InvalidMoveException e) {
+            System.out.println(e.getMessage());
         }
     }
 
@@ -114,6 +122,7 @@ public class ChessGame {
      */
     public void setBoard(ChessBoard board) {
         this.board = board;
+
     }
 
     /**
