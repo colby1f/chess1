@@ -55,7 +55,7 @@ public class ChessGame {
      */
     public Collection<ChessMove> validMoves(ChessPosition startPosition) {
         ValidMoveFinder availableMoves = new ValidMoveFinder();
-        return availableMoves.validMoves(this, board, startPosition);
+        return availableMoves.validMoves(this, startPosition);
     }
 
 
@@ -67,7 +67,7 @@ public class ChessGame {
      */
     public void makeMove(ChessMove move) throws InvalidMoveException {
         MoveMaker moveMaker = new MoveMaker();
-        moveMaker.moveMaker(move, board, teamTurn);
+        moveMaker.moveMaker(move, board);
     }
 
     /**
