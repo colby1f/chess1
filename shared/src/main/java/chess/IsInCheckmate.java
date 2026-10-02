@@ -5,6 +5,9 @@ public class IsInCheckmate {
 
         ChessBoard board = game.getBoard();
 
+        if (game.getTeamTurn() != teamColor) {
+            return false;
+        }
 
         IsInCheck isInCheck = new IsInCheck();
         if (!isInCheck.checkFinder(board, teamColor)) {
@@ -25,7 +28,6 @@ public class IsInCheckmate {
                 }
             }
         }
-
 
         return true;
     }
