@@ -55,7 +55,7 @@ public class ChessGame {
      */
     public Collection<ChessMove> validMoves(ChessPosition startPosition) {
         ValidMoveFinder legalMoves = new ValidMoveFinder();
-        return legalMoves.validMoves(this, startPosition);
+        return legalMoves.validMoves(board, startPosition);
     }
 
 
@@ -69,7 +69,11 @@ public class ChessGame {
 
         Collection<ChessMove> legalMoves = validMoves(move.getStartPosition());
 
-        if (legalMoves == null) {
+        if (legalMoves.isEmpty()) {
+            throw new InvalidMoveException("Illegal Move");
+        }
+
+        if (board.getPiece(move.getStartPosition()).getTeamColor() != teamTurn) {
             throw new InvalidMoveException("Illegal Move");
         }
 
