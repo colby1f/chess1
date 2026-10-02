@@ -79,6 +79,20 @@ public class IsInCheck {
             }
         }
 
+        // checks if the king is next to the other king
+        ChessMoveFinder kingMoveFinder = new KingMoveFinder();
+        List<ChessMove> kingMoves = kingMoveFinder.pieceMoves(board, kingPosition);
+        for (ChessMove move : kingMoves) {
+            ChessPiece otherPiece = board.getPiece(move.getEndPosition());
+            if (otherPiece != null) {
+                if (otherPiece.getPieceType() == ChessPiece.PieceType.KING) {
+                    if (otherPiece.getTeamColor() != teamColor) {
+                        return true;
+                    }
+                }
+            }
+        }
+
 
         // if not in check returns false
         return false;
