@@ -66,20 +66,23 @@ public class ChessGame {
      * @throws InvalidMoveException if move is invalid
      */
     public void makeMove(ChessMove move) throws InvalidMoveException {
-        try {
-            if (validMoves(move.getStartPosition()).contains(move)) {
-                MoveMaker moveMaker = new MoveMaker();
-                board = moveMaker.moveMaker(move, board);
-                if (teamTurn == TeamColor.WHITE) {
-                    teamTurn = TeamColor.BLACK;
-                } else {
-                    teamTurn = TeamColor.WHITE;
-                }
+
+        Collection<ChessMove> legalMoves = validMoves(move.getStartPosition());
+
+        if (legalMoves == null) {
+            throw new InvalidMoveException("Illegal Move");
+        }
+
+        if (legalMoves.contains(move)) {
+            MoveMaker moveMaker = new MoveMaker();
+            board = moveMaker.moveMaker(move, board);
+            if (teamTurn == TeamColor.WHITE) {
+                teamTurn = TeamColor.BLACK;
             } else {
-                throw new InvalidMoveException("Illegal Move");
+                teamTurn = TeamColor.WHITE;
             }
-        } catch (InvalidMoveException e) {
-            System.out.println(e.getMessage());
+        } else {
+            throw new InvalidMoveException("Illegal Move");
         }
     }
 
