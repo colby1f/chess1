@@ -19,7 +19,7 @@ public class IsInCheckmate {
                     if (piece.getTeamColor() == teamColor) {
                         ValidMoveFinder validMoves = new ValidMoveFinder();
                         if (validMoves.validMoves(game, position).isEmpty()) {
-                            return false;
+                            return true;
                         }
                     }
                 }
@@ -27,6 +27,6 @@ public class IsInCheckmate {
         }
 
 
-        return true;
+        return false;
     }
 }

@@ -19,15 +19,14 @@ public class IsInStalemate {
                     if (piece.getTeamColor() == teamColor) {
                         ValidMoveFinder validMoves = new ValidMoveFinder();
                         if (validMoves.validMoves(game, position).isEmpty()) {
-                            return false;
+                            return true;
                         }
                     }
                 }
             }
         }
 
-
-        return true;
+        return false;
 
     }
 }
