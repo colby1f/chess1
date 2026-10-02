@@ -95,8 +95,8 @@ public class ChessBoard {
             board[6][i] = new ChessPiece(ChessGame.TeamColor.BLACK, ChessPiece.PieceType.PAWN);
         }
 
-        whiteKingPosition = new ChessPosition(0, 4);
-        blackKingPosition = new ChessPosition(7, 4);
+        whiteKingPosition = new ChessPosition(1, 4);
+        blackKingPosition = new ChessPosition(8, 4);
 
     }
 
