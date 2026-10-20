@@ -2,8 +2,6 @@ package server;
 
 import chess.*;
 
-package server;
-
 public class ServerMain {
     public static void main(String[] args) {
         var port = 8080;
