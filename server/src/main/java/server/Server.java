@@ -38,6 +38,7 @@ public class Server {
 
 
     private void clearHandler(Context ctx) {
+        generalService.clear();
     }
 
 }
