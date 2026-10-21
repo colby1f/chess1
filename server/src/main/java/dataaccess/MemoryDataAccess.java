@@ -1,4 +1,4 @@
 package dataaccess;
 
-public class MemoryDataAccess {
+public class MemoryDataAccess implements DataAccess {
 }
