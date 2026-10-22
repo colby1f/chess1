@@ -30,6 +30,8 @@ public class Server {
         javalin.post("/user", this::registerHandler);
         javalin.delete("/db", this::clearHandler);
         javalin.post("/session", this::loginHandler);
+//        javalin.delete("/session", this::logoutHandler);
+//        javalin.get("/game", this::listGamesHandler);
 
     }
 
@@ -76,11 +78,21 @@ public class Server {
             LoginResult loginResult = userService.login(userData);
             ctx.status(200).contentType("application/json").result(gsonObject.toJson(loginResult));
         } catch (DataAccessException e) {
-            ctx.status(400).contentType("application/json").result(gsonObject.toJson(Map.of("Message", "Error: bad request")));
+            ctx.status(400).contentType("application/json").result(gsonObject.toJson(Map.of("Message", "Bad Request")));
         } catch (UnauthorizedException e) {
             ctx.status(401).contentType("application/json").result(gsonObject.toJson(Map.of("Message", "Error: unauthorized")));
         } catch (Exception e) {
             ctx.status(500).contentType("application/json").result(gsonObject.toJson(Map.of("Message", "Error")));
         }
     }
+
+//    private void logoutHandler(Context ctx) {
+//        Gson gsonObject = new Gson();
+//        var authToken = gsonObject.fromJson(ctx.header(), String);
+//    }
+
+//    private void listGamesHandler(Context ctx) {
+//        Gson gsonObject = new Gson();
+//        var authToken = gsonObject.fromJson(ctx.header(), String);
+//    }
 }

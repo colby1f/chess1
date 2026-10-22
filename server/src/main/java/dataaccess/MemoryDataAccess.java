@@ -3,6 +3,7 @@ package dataaccess;
 import model.*;
 import org.eclipse.jetty.server.Authentication;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -25,8 +26,20 @@ public class MemoryDataAccess implements DataAccess {
     }
 
     @Override
+    public AuthData getAuth(String authToken) {
+        return auths.get(authToken);
+    }
+
+    @Override
     public void addAuth(AuthData authData) {
         auths.put(authData.username(), authData);
+    }
+
+    @Override
+    public void removeAuth(AuthData authData) {
+        String authToken = authData.authToken();
+
+        auths.remove(authToken);
     }
 
     @Override
@@ -46,4 +59,19 @@ public class MemoryDataAccess implements DataAccess {
 
         return user;
     }
+
+    @Override
+    public void authenticate(String authToken) {
+        AuthData authData = auths.get(authToken);
+
+        if (authData == null) {
+            throw new UnauthorizedException("Error: Unauthorized");
+        }
+    }
+
+    @Override
+    public ArrayList<GameData> getGames() {
+        return new ArrayList<>(games.values());
+    }
+
 }

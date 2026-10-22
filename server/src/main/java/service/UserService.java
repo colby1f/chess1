@@ -3,6 +3,7 @@ package service;
 import dataaccess.*;
 import model.*;
 
+import java.util.ArrayList;
 import java.util.UUID;
 
 public class UserService {
@@ -50,7 +51,7 @@ public class UserService {
         String password = loginRequest.password();
 
         if (username == null || password == null) {
-            throw new DataAccessException("Error: bad request");
+            throw new DataAccessException("Error: Bad Request");
         }
 
         UserData userData = dataAccess.login(username, password);
@@ -64,7 +65,23 @@ public class UserService {
 
     }
 
-    public void logout() {
+    public void logout(String authToken) {
+
+        dataAccess.authenticate(authToken);
+
+        AuthData authData = dataAccess.getAuth(authToken);
+
+        dataAccess.removeAuth(authData);
+    }
+
+
+    public ListGamesResult listGames(String authToken) {
+
+        dataAccess.authenticate(authToken);
+
+        ArrayList<GameData> games = dataAccess.getGames();
+
+        return new ListGamesResult(games);
     }
 
 }
