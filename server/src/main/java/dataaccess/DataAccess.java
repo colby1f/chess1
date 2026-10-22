@@ -1,5 +1,6 @@
 package dataaccess;
 
+import chess.ChessGame;
 import model.*;
 
 import java.util.ArrayList;
@@ -20,6 +21,8 @@ public interface DataAccess {
     ArrayList<GameData> getGames();
 
     GameData addGame(String authToken, String gameName);
+
+    GameData addPlayer(String authToken, ChessGame.TeamColor playerColor, Integer gameID) throws AlreadyTakenException;
 
     void clear();
 

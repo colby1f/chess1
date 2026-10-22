@@ -1,5 +1,6 @@
 package service;
 
+import chess.ChessGame;
 import dataaccess.*;
 import model.*;
 
@@ -97,6 +98,21 @@ public class UserService {
         GameData gameData = dataAccess.addGame(authToken, gameName);
 
         return new CreateGameResult(gameData.gameID());
+    }
+
+
+    public void joinGame(JoinGameRequest joinGameRequest, String authToken) throws DataAccessException, AlreadyTakenException {
+
+        dataAccess.authenticate(authToken);
+
+        ChessGame.TeamColor playerColor = joinGameRequest.playerColor();
+        Integer gameID = joinGameRequest.gameID();
+
+        if (playerColor == null || gameID == null) {
+            throw new DataAccessException("Error: bad request");
+        }
+
+        GameData gameData = dataAccess.addPlayer(authToken, playerColor, gameID);
     }
 
 }

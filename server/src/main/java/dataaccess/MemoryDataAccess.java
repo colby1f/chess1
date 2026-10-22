@@ -89,4 +89,30 @@ public class MemoryDataAccess implements DataAccess {
         return gameData;
     }
 
+    @Override
+    public GameData addPlayer(String authToken, ChessGame.TeamColor playerColor, Integer gameID) throws AlreadyTakenException {
+
+        GameData gameData = games.get(gameID);
+
+        String whiteUsername = gameData.whiteUsername();
+        String blackUsername = gameData.blackUsername();
+        String gameName = gameData.gameName();
+        ChessGame game = gameData.game();
+
+        if (playerColor == ChessGame.TeamColor.WHITE) {
+            if (whiteUsername != null) {
+                throw new AlreadyTakenException("Error: already taken");
+            }
+            whiteUsername = getAuth(authToken).username();
+        } else {
+            if (blackUsername != null) {
+                throw new AlreadyTakenException("Error: already taken");
+            }
+            blackUsername = getAuth(authToken).username();
+        }
+
+        return new GameData(gameID, whiteUsername, blackUsername, gameName, game);
+
+    }
+
 }

@@ -33,6 +33,7 @@ public class Server {
 //        javalin.delete("/session", this::logoutHandler);
 //        javalin.get("/game", this::listGamesHandler);
 //        javalin.post("/game", this::createGameHandler);
+//        javalin.put("game", this::joinGameHandler);
 
     }
 
@@ -102,5 +103,8 @@ public class Server {
 //        var authToken = gsonObject.fromJson(ctx.header(), String);
 //    }
 
-
+//    private void joinGameHandler(Context ctx) {
+//        Gson gsonObject = new Gson();
+//        var authToken = gsonObject.fromJson(ctx.header(), String);
+//    }
 }
