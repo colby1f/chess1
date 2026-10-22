@@ -1,7 +1,7 @@
 package server;
 
-import dataaccess.DataAccess;
-import dataaccess.MemoryDataAccess;
+import com.google.gson.Gson;
+import dataaccess.*;
 import io.javalin.*;
 import io.javalin.http.Context;
 import service.*;
@@ -40,5 +40,12 @@ public class Server {
     private void clearHandler(Context ctx) {
         generalService.clear();
     }
+
+    private void registerHandler(Context ctx) {
+        var userData = new Gson().fromJson(ctx.body(), RegisterRequest.class);
+        userService.register(userData);
+    }
+
+    private void
 
 }

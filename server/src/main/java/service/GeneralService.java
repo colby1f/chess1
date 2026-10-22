@@ -1,6 +1,6 @@
 package service;
 
-import dataaccess.DataAccess;
+import dataaccess.*;
 
 public class GeneralService {
 
