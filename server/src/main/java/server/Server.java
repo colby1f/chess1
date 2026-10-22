@@ -43,7 +43,14 @@ public class Server {
 
 
     private void clearHandler(Context ctx) {
-        generalService.clear();
+        Gson gsonObject = new Gson();
+
+        try {
+            generalService.clear();
+            ctx.status(200);
+        } catch (Exception e) {
+            ctx.status(500).contentType("application/json").result(gsonObject.toJson(Map.of("Message", "Error")));
+        }
     }
 
     private void registerHandler(Context ctx) {
