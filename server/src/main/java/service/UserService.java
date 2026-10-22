@@ -84,4 +84,19 @@ public class UserService {
         return new ListGamesResult(games);
     }
 
+    public CreateGameResult createGame(CreateGameRequest createGameRequest, String authToken) throws DataAccessException {
+
+        dataAccess.authenticate(authToken);
+
+        String gameName = createGameRequest.gameName();
+
+        if (gameName == null) {
+            throw new DataAccessException("Error: Bad Request");
+        }
+
+        GameData gameData = dataAccess.addGame(authToken, gameName);
+
+        return new CreateGameResult(gameData.gameID());
+    }
+
 }

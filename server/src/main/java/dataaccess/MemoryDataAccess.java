@@ -1,7 +1,9 @@
 package dataaccess;
 
+import chess.ChessGame;
 import model.*;
 import org.eclipse.jetty.server.Authentication;
+import service.CreateGameRequest;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -14,6 +16,7 @@ public class MemoryDataAccess implements DataAccess {
     private final Map<String, UserData> users = new HashMap<>();
     private final Map<String, AuthData> auths = new HashMap<>();
     private final Map<Integer, GameData> games = new HashMap<>();
+    private int availableGameID = 1;
 
     @Override
     public UserData getUser(String username) {
@@ -72,6 +75,18 @@ public class MemoryDataAccess implements DataAccess {
     @Override
     public ArrayList<GameData> getGames() {
         return new ArrayList<>(games.values());
+    }
+
+    @Override
+    public GameData addGame(String authToken, String gameName) {
+
+        GameData gameData = new GameData(availableGameID, null, null, gameName, new ChessGame());
+
+        games.put(availableGameID, gameData);
+
+        availableGameID++;
+
+        return gameData;
     }
 
 }

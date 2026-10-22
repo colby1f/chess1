@@ -32,6 +32,7 @@ public class Server {
         javalin.post("/session", this::loginHandler);
 //        javalin.delete("/session", this::logoutHandler);
 //        javalin.get("/game", this::listGamesHandler);
+//        javalin.post("/game", this::createGameHandler);
 
     }
 
@@ -95,4 +96,11 @@ public class Server {
 //        Gson gsonObject = new Gson();
 //        var authToken = gsonObject.fromJson(ctx.header(), String);
 //    }
+
+//    private void createGameHandler(Context ctx) {
+//        Gson gsonObject = new Gson();
+//        var authToken = gsonObject.fromJson(ctx.header(), String);
+//    }
+
+
 }

@@ -19,6 +19,8 @@ public interface DataAccess {
 
     ArrayList<GameData> getGames();
 
+    GameData addGame(String authToken, String gameName);
+
     void clear();
 
     UserData login(String username, String password);
