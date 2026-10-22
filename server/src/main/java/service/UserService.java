@@ -55,7 +55,7 @@ public class UserService {
             throw new DataAccessException("Error: Bad Request");
         }
 
-        UserData userData = dataAccess.login(username, password);
+        dataAccess.login(username, password);
 
         String authToken = generateToken();
         AuthData authData = new AuthData(authToken, username);
@@ -112,7 +112,7 @@ public class UserService {
             throw new DataAccessException("Error: bad request");
         }
 
-        GameData gameData = dataAccess.addPlayer(authToken, playerColor, gameID);
+        dataAccess.addPlayer(authToken, playerColor, gameID);
     }
 
 }

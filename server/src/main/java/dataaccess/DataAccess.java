@@ -22,11 +22,11 @@ public interface DataAccess {
 
     GameData addGame(String authToken, String gameName);
 
-    GameData addPlayer(String authToken, ChessGame.TeamColor playerColor, Integer gameID) throws AlreadyTakenException;
+    void addPlayer(String authToken, ChessGame.TeamColor playerColor, Integer gameID) throws AlreadyTakenException;
 
     void clear();
 
-    UserData login(String username, String password);
+    void login(String username, String password);
 
 
 }

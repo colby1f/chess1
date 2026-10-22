@@ -51,14 +51,12 @@ public class MemoryDataAccess implements DataAccess {
     }
 
     @Override
-    public UserData login(String username, String password) {
+    public void login(String username, String password) {
         UserData user = users.get(username);
 
         if (!Objects.equals(user.password(), password)) {
             throw new UnauthorizedException("Error: Unauthorized");
         }
-
-        return user;
     }
 
     @Override
@@ -88,7 +86,7 @@ public class MemoryDataAccess implements DataAccess {
     }
 
     @Override
-    public GameData addPlayer(String authToken, ChessGame.TeamColor playerColor, Integer gameID) throws AlreadyTakenException {
+    public void addPlayer(String authToken, ChessGame.TeamColor playerColor, Integer gameID) throws AlreadyTakenException {
 
         GameData gameData = games.get(gameID);
 
@@ -109,7 +107,7 @@ public class MemoryDataAccess implements DataAccess {
             blackUsername = getAuth(authToken).username();
         }
 
-        return new GameData(gameID, whiteUsername, blackUsername, gameName, game);
+        games.put(gameID, new GameData(gameID, whiteUsername, blackUsername, gameName, game));
 
     }
 
