@@ -11,5 +11,6 @@ public class GeneralService {
     }
 
     public void clear() {
+        dataAccess.clear();
     }
 }
