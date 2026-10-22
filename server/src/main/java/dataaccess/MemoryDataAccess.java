@@ -33,7 +33,7 @@ public class MemoryDataAccess implements DataAccess {
 
     @Override
     public void addAuth(AuthData authData) {
-        auths.put(authData.username(), authData);
+        auths.put(authData.authToken(), authData);
     }
 
     @Override
