@@ -6,6 +6,8 @@ import io.javalin.*;
 import io.javalin.http.Context;
 import service.*;
 
+import java.util.Map;
+
 
 public class Server {
 
@@ -21,9 +23,12 @@ public class Server {
         userService = new UserService(dataAccess);
         gameService = new GameService(dataAccess);
 
-        javalin = Javalin.create(config -> config.staticFiles.add("web"));
+        javalin = Javalin.create(
+                config -> config.staticFiles.add("web"));
 
         // Register your endpoints and exception handlers here.
+        javalin.post("/user", this::registerHandler);
+        javalin.delete("/db", this::clearHandler);
 
     }
 
@@ -42,10 +47,19 @@ public class Server {
     }
 
     private void registerHandler(Context ctx) {
-        var userData = new Gson().fromJson(ctx.body(), RegisterRequest.class);
-        userService.register(userData);
+        Gson gsonObject = new Gson();
+        var userData = gsonObject.fromJson(ctx.body(), RegisterRequest.class);
+        try {
+            RegisterResult registerResult = userService.register(userData);
+            ctx.status(200).contentType("application/json").result(gsonObject.toJson(registerResult));
+        } catch (AlreadyTakenException e) {
+            ctx.status(403).contentType("application/json").result(gsonObject.toJson(Map.of("Message", "Error: Already Taken")));
+        } catch (DataAccessException e) {
+            ctx.status(400).contentType("application/json").result(gsonObject.toJson(Map.of("Message", "Error: bad request")));
+        } catch (Exception e) {
+            ctx.status(500).contentType("application/json").result(gsonObject.toJson(Map.of("Message", "Error")));
+        }
     }
 
-    private void
 
 }

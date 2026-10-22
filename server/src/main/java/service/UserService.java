@@ -17,7 +17,16 @@ public class UserService {
         return UUID.randomUUID().toString();
     }
 
-    public RegisterResult register(RegisterRequest registerRequest) throws AlreadyTakenException {
+    public RegisterResult register(RegisterRequest registerRequest) throws AlreadyTakenException, DataAccessException {
+
+
+        String username = registerRequest.username();
+        String password = registerRequest.password();
+        String email = registerRequest.email();
+
+        if (username == null || password == null || email == null) {
+            throw new DataAccessException("Error: bad request");
+        }
 
         UserData user = dataAccess.getUser(registerRequest.username());
 
@@ -25,9 +34,6 @@ public class UserService {
             throw new AlreadyTakenException("Error: Already Taken");
         }
 
-        String username = registerRequest.username();
-        String password = registerRequest.password();
-        String email = registerRequest.email();
         String authToken = generateToken();
 
         UserData userData = new UserData(username, password, email);
