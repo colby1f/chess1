@@ -26,14 +26,13 @@ public class Server {
         javalin = Javalin.create(
                 config -> config.staticFiles.add("web"));
 
-        // Register your endpoints and exception handlers here.
         javalin.post("/user", this::registerHandler);
         javalin.delete("/db", this::clearHandler);
         javalin.post("/session", this::loginHandler);
-//        javalin.delete("/session", this::logoutHandler);
-//        javalin.get("/game", this::listGamesHandler);
-//        javalin.post("/game", this::createGameHandler);
-//        javalin.put("game", this::joinGameHandler);
+        javalin.delete("/session", this::logoutHandler);
+        javalin.get("/game", this::listGamesHandler);
+        javalin.post("/game", this::createGameHandler);
+        javalin.put("game", this::joinGameHandler);
 
     }
 
@@ -54,7 +53,7 @@ public class Server {
             generalService.clear();
             ctx.status(200);
         } catch (Exception e) {
-            ctx.status(500).contentType("application/json").result(gsonObject.toJson(Map.of("Message", "Error")));
+            ctx.status(500).contentType("application/json").result(gsonObject.toJson(Map.of("message", "Error")));
         }
     }
 
@@ -64,12 +63,12 @@ public class Server {
         try {
             RegisterResult registerResult = userService.register(userData);
             ctx.status(200).contentType("application/json").result(gsonObject.toJson(registerResult));
-        } catch (AlreadyTakenException e) {
-            ctx.status(403).contentType("application/json").result(gsonObject.toJson(Map.of("Message", "Error: Already Taken")));
         } catch (DataAccessException e) {
-            ctx.status(400).contentType("application/json").result(gsonObject.toJson(Map.of("Message", "Error: bad request")));
+            ctx.status(400).contentType("application/json").result(gsonObject.toJson(Map.of("message", "Error: bad request")));
+        } catch (AlreadyTakenException e) {
+            ctx.status(403).contentType("application/json").result(gsonObject.toJson(Map.of("message", "Error: Already Taken")));
         } catch (Exception e) {
-            ctx.status(500).contentType("application/json").result(gsonObject.toJson(Map.of("Message", "Error")));
+            ctx.status(500).contentType("application/json").result(gsonObject.toJson(Map.of("message", "Error")));
         }
     }
 
@@ -80,31 +79,71 @@ public class Server {
             LoginResult loginResult = userService.login(userData);
             ctx.status(200).contentType("application/json").result(gsonObject.toJson(loginResult));
         } catch (DataAccessException e) {
-            ctx.status(400).contentType("application/json").result(gsonObject.toJson(Map.of("Message", "Bad Request")));
+            ctx.status(400).contentType("application/json").result(gsonObject.toJson(Map.of("message", "Error: bad request")));
         } catch (UnauthorizedException e) {
-            ctx.status(401).contentType("application/json").result(gsonObject.toJson(Map.of("Message", "Error: unauthorized")));
+            ctx.status(401).contentType("application/json").result(gsonObject.toJson(Map.of("message", "Error: unauthorized")));
         } catch (Exception e) {
-            ctx.status(500).contentType("application/json").result(gsonObject.toJson(Map.of("Message", "Error")));
+            ctx.status(500).contentType("application/json").result(gsonObject.toJson(Map.of("message", "Error")));
         }
     }
 
-//    private void logoutHandler(Context ctx) {
-//        Gson gsonObject = new Gson();
-//        var authToken = gsonObject.fromJson(ctx.header(), String);
-//    }
+    private void logoutHandler(Context ctx) {
+        Gson gsonObject = new Gson();
+        var authToken = ctx.header("authorization");
+        try {
+            userService.logout(authToken);
+            ctx.status(200);
+        } catch (UnauthorizedException e) {
+            ctx.status(401).contentType("application/json").result(gsonObject.toJson(Map.of("message", "Error: unauthorized")));
+        } catch (Exception e) {
+            ctx.status(500).contentType("application/json").result(gsonObject.toJson(Map.of("message", "Error")));
+        }
+    }
 
-//    private void listGamesHandler(Context ctx) {
-//        Gson gsonObject = new Gson();
-//        var authToken = gsonObject.fromJson(ctx.header(), String);
-//    }
+    private void listGamesHandler(Context ctx) {
+        Gson gsonObject = new Gson();
+        var authToken = ctx.header("authorization");
+        try {
+            ListGamesResult listGamesResult = gameService.listGames(authToken);
+            ctx.status(200).contentType("application/json").result(gsonObject.toJson(listGamesResult));
+        } catch (UnauthorizedException e) {
+            ctx.status(401).contentType("application/json").result(gsonObject.toJson(Map.of("message", "Error: unauthorized")));
+        } catch (Exception e) {
+            ctx.status(500).contentType("application/json").result(gsonObject.toJson(Map.of("message", "Error")));
+        }
+    }
 
-//    private void createGameHandler(Context ctx) {
-//        Gson gsonObject = new Gson();
-//        var authToken = gsonObject.fromJson(ctx.header(), String);
-//    }
+    private void createGameHandler(Context ctx) {
+        Gson gsonObject = new Gson();
+        var authToken = ctx.header("authorization");
+        var createGameRequest = gsonObject.fromJson(ctx.body(), CreateGameRequest.class);
+        try {
+            CreateGameResult createGameResult = gameService.createGame(createGameRequest, authToken);
+            ctx.status(200).contentType("application/json").result(gsonObject.toJson(createGameResult));
+        } catch (DataAccessException e) {
+            ctx.status(400).contentType("application/json").result(gsonObject.toJson(Map.of("message", "Error: bad request")));
+        } catch (UnauthorizedException e) {
+            ctx.status(401).contentType("application/json").result(gsonObject.toJson(Map.of("message", "Error: unauthorized")));
+        } catch (Exception e) {
+            ctx.status(500).contentType("application/json").result(gsonObject.toJson(Map.of("message", "Error")));
+        }
+    }
 
-//    private void joinGameHandler(Context ctx) {
-//        Gson gsonObject = new Gson();
-//        var authToken = gsonObject.fromJson(ctx.header(), String);
-//    }
+    private void joinGameHandler(Context ctx) {
+        Gson gsonObject = new Gson();
+        var authToken = ctx.header("authorization");
+        var joinGameRequest = gsonObject.fromJson(ctx.body(), JoinGameRequest.class);
+        try {
+            gameService.joinGame(joinGameRequest, authToken);
+            ctx.status(200);
+        } catch (DataAccessException e) {
+            ctx.status(400).contentType("application/json").result(gsonObject.toJson(Map.of("message", "Error: bad request")));
+        } catch (UnauthorizedException e) {
+            ctx.status(401).contentType("application/json").result(gsonObject.toJson(Map.of("message", "Error: unauthorized")));
+        } catch (AlreadyTakenException e) {
+            ctx.status(403).contentType("application/json").result(gsonObject.toJson(Map.of("message", "Error: already taken")));
+        } catch (Exception e) {
+            ctx.status(500).contentType("application/json").result(gsonObject.toJson(Map.of("message", "Error")));
+        }
+    }
 }

@@ -54,6 +54,10 @@ public class MemoryDataAccess implements DataAccess {
     public void login(String username, String password) {
         UserData user = users.get(username);
 
+        if (user == null) {
+            throw new UnauthorizedException("Error: Unauthorized");
+        }
+
         if (!Objects.equals(user.password(), password)) {
             throw new UnauthorizedException("Error: Unauthorized");
         }
