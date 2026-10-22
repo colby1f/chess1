@@ -2,8 +2,6 @@ package dataaccess;
 
 import chess.ChessGame;
 import model.*;
-import org.eclipse.jetty.server.Authentication;
-import service.CreateGameRequest;
 
 import java.util.ArrayList;
 import java.util.HashMap;
