@@ -19,7 +19,6 @@ public class UserService {
 
     public RegisterResult register(RegisterRequest registerRequest) throws AlreadyTakenException, DataAccessException {
 
-
         String username = registerRequest.username();
         String password = registerRequest.password();
         String email = registerRequest.email();
@@ -46,7 +45,19 @@ public class UserService {
     }
 
     public LoginResult login(LoginRequest loginRequest) {
-        return null;
+
+        String username = loginRequest.username();
+        String password = loginRequest.password();
+
+        UserData userData = dataAccess.login(username, password);
+
+        String authToken = generateToken();
+        AuthData authData = new AuthData(authToken, username);
+
+        dataAccess.addAuth(authData);
+
+        return new LoginResult(username, authToken);
+
     }
 
     public void logout() {

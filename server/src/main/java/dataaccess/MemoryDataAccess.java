@@ -1,9 +1,11 @@
 package dataaccess;
 
 import model.*;
+import org.eclipse.jetty.server.Authentication;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 
 public class MemoryDataAccess implements DataAccess {
@@ -32,6 +34,17 @@ public class MemoryDataAccess implements DataAccess {
         users.clear();
         auths.clear();
         games.clear();
+    }
+
+    @Override
+    public UserData login(String username, String password) {
+        UserData user = users.get(username);
+
+        if (!Objects.equals(user.password(), password)) {
+            throw new UnauthorizedException("Error: Unauthorized");
+        }
+
+        return user;
     }
 
 
