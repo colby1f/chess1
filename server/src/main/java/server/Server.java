@@ -29,6 +29,7 @@ public class Server {
         // Register your endpoints and exception handlers here.
         javalin.post("/user", this::registerHandler);
         javalin.delete("/db", this::clearHandler);
+        javalin.post("/session", this::loginHandler);
 
     }
 
@@ -68,5 +69,18 @@ public class Server {
         }
     }
 
-
+    private void loginHandler(Context ctx) {
+        Gson gsonObject = new Gson();
+        var userData = gsonObject.fromJson(ctx.body(), LoginRequest.class);
+        try {
+            LoginResult loginResult = userService.login(userData);
+            ctx.status(200).contentType("application/json").result(gsonObject.toJson(loginResult));
+        } catch (DataAccessException e) {
+            ctx.status(400).contentType("application/json").result(gsonObject.toJson(Map.of("Message", "Error: bad request")));
+        } catch (UnauthorizedException e) {
+            ctx.status(401).contentType("application/json").result(gsonObject.toJson(Map.of("Message", "Error: unauthorized")));
+        } catch (Exception e) {
+            ctx.status(500).contentType("application/json").result(gsonObject.toJson(Map.of("Message", "Error")));
+        }
+    }
 }

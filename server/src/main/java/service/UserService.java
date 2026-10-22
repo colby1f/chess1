@@ -44,10 +44,14 @@ public class UserService {
         return new RegisterResult(username, authToken);
     }
 
-    public LoginResult login(LoginRequest loginRequest) {
+    public LoginResult login(LoginRequest loginRequest) throws DataAccessException {
 
         String username = loginRequest.username();
         String password = loginRequest.password();
+
+        if (username == null || password == null) {
+            throw new DataAccessException("Error: bad request");
+        }
 
         UserData userData = dataAccess.login(username, password);
 
