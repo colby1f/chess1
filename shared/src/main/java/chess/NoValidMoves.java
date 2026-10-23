@@ -14,11 +14,9 @@ public class NoValidMoves {
                 ChessPosition position = new ChessPosition(row, col);
                 ChessPiece piece = board.getPiece(position);
                 if (piece != null) {
-                    if (piece.getTeamColor() == teamColor) {
-                        ValidMoveFinder validMoves = new ValidMoveFinder();
-                        if (!validMoves.validMoves(board, position).isEmpty()) {
-                            return false;
-                        }
+                    ValidMoveFinder validMoves = new ValidMoveFinder();
+                    if (piece.getTeamColor() == teamColor && !validMoves.validMoves(board, position).isEmpty()) {
+                        return false;
                     }
                 }
             }
@@ -27,4 +25,5 @@ public class NoValidMoves {
         return true;
 
     }
+
 }

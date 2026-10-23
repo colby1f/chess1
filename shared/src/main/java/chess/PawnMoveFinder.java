@@ -64,7 +64,7 @@ public class PawnMoveFinder {
     }
 
 
-    public void promotionPiece(ChessPosition oldPosition, ChessPosition newPosition, List<ChessMove> availableMoves) {
+    private void promotionPiece(ChessPosition oldPosition, ChessPosition newPosition, List<ChessMove> availableMoves) {
         ChessPiece.PieceType[] promotionTypes = {
                 ChessPiece.PieceType.QUEEN,
                 ChessPiece.PieceType.ROOK,
