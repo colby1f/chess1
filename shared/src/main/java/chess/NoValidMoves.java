@@ -1,16 +1,11 @@
 package chess;
 
-public class IsInCheckmate {
-    public boolean isInCheckmate(ChessGame game, ChessGame.TeamColor teamColor) {
+public class NoValidMoves {
+    public boolean noValidMoves(ChessGame game, ChessGame.TeamColor teamColor) {
 
         ChessBoard board = game.getBoard();
 
         if (game.getTeamTurn() != teamColor) {
-            return false;
-        }
-
-        IsInCheck isInCheck = new IsInCheck();
-        if (!isInCheck.checkFinder(board, teamColor)) {
             return false;
         }
 
@@ -30,5 +25,6 @@ public class IsInCheckmate {
         }
 
         return true;
+
     }
 }

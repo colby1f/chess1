@@ -108,8 +108,13 @@ public class ChessGame {
      * @return True if the specified team is in checkmate
      */
     public boolean isInCheckmate(TeamColor teamColor) {
-        IsInCheckmate checkmateFinder = new IsInCheckmate();
-        return checkmateFinder.isInCheckmate(this, teamColor);
+        NoValidMoves noValidMoves = new NoValidMoves();
+
+        if (!isInCheck(teamColor)) {
+            return false;
+        }
+
+        return noValidMoves.noValidMoves(this, teamColor);
     }
 
     /**
@@ -120,8 +125,13 @@ public class ChessGame {
      * @return True if the specified team is in stalemate, otherwise false
      */
     public boolean isInStalemate(TeamColor teamColor) {
-        IsInStalemate stalemateFinder = new IsInStalemate();
-        return stalemateFinder.isInStalemate(this, teamColor);
+        NoValidMoves noValidMoves = new NoValidMoves();
+
+        if (isInCheck(teamColor)) {
+            return false;
+        }
+
+        return noValidMoves.noValidMoves(this, teamColor);
     }
 
     /**

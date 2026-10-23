@@ -52,8 +52,9 @@ public class IsInCheck {
         }
 
         // checks if the king is in check horizontally to a rook or queen
-        ChessMoveFinder rookMoveFinder = new RookMoveFinder();
-        List<ChessMove> rookMoves = rookMoveFinder.pieceMoves(board, kingPosition);
+        RoBiQuMoveFinder rookMoveFinder = new RoBiQuMoveFinder();
+        int[][] rookDirections = {{0, -1}, {0, 1}, {1, 0}, {-1, 0}};
+        List<ChessMove> rookMoves = rookMoveFinder.pieceMoves(board, kingPosition, rookDirections);
         for (ChessMove move : rookMoves) {
             ChessPiece otherPiece = board.getPiece(move.getEndPosition());
             if (otherPiece != null) {
@@ -66,8 +67,9 @@ public class IsInCheck {
         }
 
         // checks if the king is in check diagonally to a bishop or queen
-        ChessMoveFinder bishopMoveFinder = new BishopMoveFinder();
-        List<ChessMove> bishopMoves = bishopMoveFinder.pieceMoves(board, kingPosition);
+        RoBiQuMoveFinder bishopMoveFinder = new RoBiQuMoveFinder();
+        int[][] bishopDirections = {{1, -1}, {1, 1}, {-1, -1}, {-1, 1}};
+        List<ChessMove> bishopMoves = bishopMoveFinder.pieceMoves(board, kingPosition, bishopDirections);
         for (ChessMove move : bishopMoves) {
             ChessPiece otherPiece = board.getPiece(move.getEndPosition());
             if (otherPiece != null) {

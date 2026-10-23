@@ -3,13 +3,11 @@ package chess;
 import java.util.ArrayList;
 import java.util.List;
 
-public class QueenMoveFinder implements ChessMoveFinder {
-    public List<ChessMove> pieceMoves(ChessBoard board, ChessPosition position) {
+public class RoBiQuMoveFinder {
+    public List<ChessMove> pieceMoves(ChessBoard board, ChessPosition position, int[][] directions) {
         ChessGame.TeamColor pieceColor = board.getPiece(position).getTeamColor();
 
         List<ChessMove> availableMoves = new ArrayList<>();
-
-        int[][] directions = {{1, -1}, {1, 1}, {-1, -1}, {-1, 1}, {0, -1}, {0, 1}, {1, 0}, {-1, 0}};
 
         for (int[] dir : directions) {
             for (int distance = 1; distance < 8; distance++) {

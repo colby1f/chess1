@@ -56,16 +56,19 @@ public class ChessPiece {
         ChessPiece.PieceType pieceType = type;
 
         if (pieceType == PieceType.ROOK) {
-            ChessMoveFinder moveFinder = new RookMoveFinder();
-            return moveFinder.pieceMoves(board, myPosition);
+            RoBiQuMoveFinder moveFinder = new RoBiQuMoveFinder();
+            int[][] directions = {{0, -1}, {0, 1}, {1, 0}, {-1, 0}};
+            return moveFinder.pieceMoves(board, myPosition, directions);
         }
         if (pieceType == PieceType.BISHOP) {
-            ChessMoveFinder moveFinder = new BishopMoveFinder();
-            return moveFinder.pieceMoves(board, myPosition);
+            RoBiQuMoveFinder moveFinder = new RoBiQuMoveFinder();
+            int[][] directions = {{1, -1}, {1, 1}, {-1, -1}, {-1, 1}};
+            return moveFinder.pieceMoves(board, myPosition, directions);
         }
         if (pieceType == PieceType.QUEEN) {
-            ChessMoveFinder moveFinder = new QueenMoveFinder();
-            return moveFinder.pieceMoves(board, myPosition);
+            RoBiQuMoveFinder moveFinder = new RoBiQuMoveFinder();
+            int[][] directions = {{1, -1}, {1, 1}, {-1, -1}, {-1, 1}, {0, -1}, {0, 1}, {1, 0}, {-1, 0}};
+            return moveFinder.pieceMoves(board, myPosition, directions);
         }
         if (pieceType == PieceType.KING) {
             ChessMoveFinder moveFinder = new KingMoveFinder();
