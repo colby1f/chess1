@@ -21,8 +21,9 @@ public class IsInCheck {
         }
 
         // checks if the king is in check to a knight
-        ChessMoveFinder knightMoveFinder = new KnightMoveFinder();
-        List<ChessMove> knightMoves = knightMoveFinder.pieceMoves(board, kingPosition);
+        KiKnMoveFinder knightMoveFinder = new KiKnMoveFinder();
+        int[][] knightDirections = {{2, -1}, {2, 1}, {-2, -1}, {-2, 1}, {1, -2}, {1, 2}, {-1, -2}, {-1, 2}};
+        List<ChessMove> knightMoves = knightMoveFinder.pieceMoves(board, kingPosition, knightDirections);
         for (ChessMove move : knightMoves) {
             ChessPiece otherPiece = board.getPiece(move.getEndPosition());
             if (otherPiece != null) {
@@ -82,8 +83,9 @@ public class IsInCheck {
         }
 
         // checks if the king is next to the other king
-        ChessMoveFinder kingMoveFinder = new KingMoveFinder();
-        List<ChessMove> kingMoves = kingMoveFinder.pieceMoves(board, kingPosition);
+        KiKnMoveFinder kingMoveFinder = new KiKnMoveFinder();
+        int[][] kingDirections = {{1, -1}, {1, 1}, {-1, -1}, {-1, 1}, {0, -1}, {0, 1}, {1, 0}, {-1, 0}};
+        List<ChessMove> kingMoves = kingMoveFinder.pieceMoves(board, kingPosition, kingDirections);
         for (ChessMove move : kingMoves) {
             ChessPiece otherPiece = board.getPiece(move.getEndPosition());
             if (otherPiece != null) {

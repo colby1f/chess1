@@ -3,7 +3,7 @@ package chess;
 import java.util.ArrayList;
 import java.util.List;
 
-public class PawnMoveFinder implements ChessMoveFinder {
+public class PawnMoveFinder {
     public List<ChessMove> pieceMoves(ChessBoard board, ChessPosition position) {
         ChessGame.TeamColor pieceColor = board.getPiece(position).getTeamColor();
 

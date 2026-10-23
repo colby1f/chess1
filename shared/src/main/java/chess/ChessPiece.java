@@ -71,15 +71,17 @@ public class ChessPiece {
             return moveFinder.pieceMoves(board, myPosition, directions);
         }
         if (pieceType == PieceType.KING) {
-            ChessMoveFinder moveFinder = new KingMoveFinder();
-            return moveFinder.pieceMoves(board, myPosition);
+            KiKnMoveFinder moveFinder = new KiKnMoveFinder();
+            int[][] directions = {{1, -1}, {1, 1}, {-1, -1}, {-1, 1}, {0, -1}, {0, 1}, {1, 0}, {-1, 0}};
+            return moveFinder.pieceMoves(board, myPosition, directions);
         }
         if (pieceType == PieceType.KNIGHT) {
-            ChessMoveFinder moveFinder = new KnightMoveFinder();
-            return moveFinder.pieceMoves(board, myPosition);
+            KiKnMoveFinder moveFinder = new KiKnMoveFinder();
+            int[][] directions = {{2, -1}, {2, 1}, {-2, -1}, {-2, 1}, {1, -2}, {1, 2}, {-1, -2}, {-1, 2}};
+            return moveFinder.pieceMoves(board, myPosition, directions);
         }
         if (pieceType == PieceType.PAWN) {
-            ChessMoveFinder moveFinder = new PawnMoveFinder();
+            PawnMoveFinder moveFinder = new PawnMoveFinder();
             return moveFinder.pieceMoves(board, myPosition);
         }
 
