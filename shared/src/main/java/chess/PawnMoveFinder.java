@@ -9,13 +9,6 @@ public class PawnMoveFinder {
 
         List<ChessMove> availableMoves = new ArrayList<>();
 
-        ChessPiece.PieceType[] promotionTypes = {
-                ChessPiece.PieceType.QUEEN,
-                ChessPiece.PieceType.ROOK,
-                ChessPiece.PieceType.BISHOP,
-                ChessPiece.PieceType.KNIGHT,
-        };
-
         int promotion = 8;
         int movement = 1;
         int twoMove = 2;
@@ -32,9 +25,7 @@ public class PawnMoveFinder {
 
         if (board.getPiece(oneForward) == null) {
             if (oneForward.getRow() == promotion) {
-                for (ChessPiece.PieceType promotionType : promotionTypes) {
-                    availableMoves.add(new ChessMove(position, oneForward, promotionType));
-                }
+                promotionPiece(position, oneForward, availableMoves);
             } else {
                 availableMoves.add(new ChessMove(position, oneForward, null));
             }
@@ -49,9 +40,7 @@ public class PawnMoveFinder {
             if (board.getPiece(leftDiagonal) != null) {
                 if (board.getPiece(leftDiagonal).getTeamColor() != pieceColor) {
                     if (leftDiagonal.getRow() == promotion) {
-                        for (ChessPiece.PieceType promotionType : promotionTypes) {
-                            availableMoves.add(new ChessMove(position, leftDiagonal, promotionType));
-                        }
+                        promotionPiece(position, leftDiagonal, availableMoves);
                     } else {
                         availableMoves.add(new ChessMove(position, leftDiagonal, null));
                     }
@@ -63,9 +52,7 @@ public class PawnMoveFinder {
             if (board.getPiece(rightDiagonal) != null) {
                 if (board.getPiece(rightDiagonal).getTeamColor() != pieceColor) {
                     if (rightDiagonal.getRow() == promotion) {
-                        for (ChessPiece.PieceType promotionType : promotionTypes) {
-                            availableMoves.add(new ChessMove(position, rightDiagonal, promotionType));
-                        }
+                        promotionPiece(position, rightDiagonal, availableMoves);
                     } else {
                         availableMoves.add(new ChessMove(position, rightDiagonal, null));
                     }
@@ -74,5 +61,19 @@ public class PawnMoveFinder {
         }
 
         return availableMoves;
+    }
+
+
+    public void promotionPiece(ChessPosition oldPosition, ChessPosition newPosition, List<ChessMove> availableMoves) {
+        ChessPiece.PieceType[] promotionTypes = {
+                ChessPiece.PieceType.QUEEN,
+                ChessPiece.PieceType.ROOK,
+                ChessPiece.PieceType.BISHOP,
+                ChessPiece.PieceType.KNIGHT,
+        };
+
+        for (ChessPiece.PieceType promotionType : promotionTypes) {
+            availableMoves.add(new ChessMove(oldPosition, newPosition, promotionType));
+        }
     }
 }
