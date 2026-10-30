@@ -32,7 +32,7 @@ public class GameService {
             throw new DataAccessException("Error: Bad Request");
         }
 
-        GameData gameData = dataAccess.addGame(authToken, gameName);
+        GameData gameData = dataAccess.addGame(gameName);
 
         return new CreateGameResult(gameData.gameID());
     }

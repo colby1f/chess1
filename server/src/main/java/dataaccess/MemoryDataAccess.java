@@ -78,7 +78,7 @@ public class MemoryDataAccess implements DataAccess {
     }
 
     @Override
-    public GameData addGame(String authToken, String gameName) {
+    public GameData addGame(String gameName) {
 
         GameData gameData = new GameData(availableGameID, null, null, gameName, new ChessGame());
 
