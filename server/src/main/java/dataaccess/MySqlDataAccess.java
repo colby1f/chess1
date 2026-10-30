@@ -35,8 +35,9 @@ public class MySqlDataAccess implements DataAccess {
     }
 
     @Override
-    public void addAuth(AuthData authData) {
-
+    public void addAuth(AuthData authData) throws DataAccessException {
+        var statement = "INSERT INTO auth (authToken, username) VALUES (?, ?)";
+        executeUpdate(statement, authData.authToken(), authData.username());
     }
 
     @Override
