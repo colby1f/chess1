@@ -8,7 +8,7 @@ import java.util.ArrayList;
 public interface DataAccess {
     UserData getUser(String username);
 
-    void addUser(UserData userData);
+    void addUser(UserData userData) throws DataAccessException;
 
     AuthData getAuth(String authToken);
 
@@ -20,7 +20,7 @@ public interface DataAccess {
 
     ArrayList<GameData> getGames();
 
-    GameData addGame(String authToken, String gameName);
+    GameData addGame(String gameName) throws DataAccessException;
 
     void addPlayer(String authToken, ChessGame.TeamColor playerColor, Integer gameID) throws AlreadyTakenException;
 
