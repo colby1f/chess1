@@ -25,7 +25,7 @@ public interface DataAccess {
 
     void addPlayer(String authToken, ChessGame.TeamColor playerColor, Integer gameID) throws AlreadyTakenException;
 
-    void clear();
+    void clear() throws DataAccessException;
 
     void login(String username, String password);
 
