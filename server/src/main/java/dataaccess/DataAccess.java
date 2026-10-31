@@ -7,11 +7,11 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 public interface DataAccess {
-    UserData getUser(String username);
+    UserData getUser(String username) throws DataAccessException;
 
-    void addUser(UserData userData) throws DataAccessException, SQLException;
+    void addUser(UserData userData) throws DataAccessException;
 
-    AuthData getAuth(String authToken);
+    AuthData getAuth(String authToken) throws DataAccessException;
 
     void addAuth(AuthData authData) throws DataAccessException;
 
@@ -19,9 +19,9 @@ public interface DataAccess {
 
     void authenticate(String authToken);
 
-    ArrayList<GameData> getGames();
+    ArrayList<GameData> getGames() throws DataAccessException;
 
-    GameData addGame(String gameName) throws DataAccessException, SQLException;
+    GameData addGame(String gameName) throws DataAccessException;
 
     void addPlayer(String authToken, ChessGame.TeamColor playerColor, Integer gameID) throws AlreadyTakenException;
 

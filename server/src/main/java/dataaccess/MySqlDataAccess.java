@@ -19,8 +19,20 @@ public class MySqlDataAccess implements DataAccess {
 
 
     @Override
-    public UserData getUser(String username) {
-        return null;
+    public UserData getUser(String username) throws DataAccessException {
+        try (var conn = DatabaseManager.getConnection()) {
+
+            var statement = "SELECT username, password, email FROM user WHERE username=?";
+
+            try (PreparedStatement ps = conn.prepareStatement(statement)) {
+                ps.setString(1, username);
+                try (ResultSet rs = ps.executeQuery()) {
+                    return readUser(rs);
+                }
+            }
+        } catch (Exception e) {
+            throw new DataAccessException(e.getMessage());
+        }
     }
 
     @Override
@@ -41,8 +53,20 @@ public class MySqlDataAccess implements DataAccess {
     }
 
     @Override
-    public AuthData getAuth(String authToken) {
-        return null;
+    public AuthData getAuth(String authToken) throws DataAccessException {
+        try (var conn = DatabaseManager.getConnection()) {
+
+            var statement = "SELECT authToken, username FROM auth WHERE authToken=?";
+
+            try (PreparedStatement ps = conn.prepareStatement(statement)) {
+                ps.setString(1, authToken);
+                try (ResultSet rs = ps.executeQuery()) {
+                    return readAuth(rs);
+                }
+            }
+        } catch (Exception e) {
+            throw new DataAccessException(e.getMessage());
+        }
     }
 
     @Override
@@ -72,8 +96,26 @@ public class MySqlDataAccess implements DataAccess {
     }
 
     @Override
-    public ArrayList<GameData> getGames() {
-        return null;
+    public ArrayList<GameData> getGames() throws DataAccessException {
+        ArrayList<GameData> games = new ArrayList<>();
+
+        try (var conn = DatabaseManager.getConnection()) {
+
+            var statement = "SELECT gameID, whiteUsername, blackUsername, gameName, game FROM game";
+
+            try (PreparedStatement ps = conn.prepareStatement(statement)) {
+                try (ResultSet rs = ps.executeQuery()) {
+                    while (rs.next()) {
+                        GameData gameData = readGame(rs);
+                        games.add(gameData);
+                    }
+
+                    return games;
+                }
+            }
+        } catch (Exception e) {
+            throw new DataAccessException(e.getMessage());
+        }
     }
 
     @Override
@@ -93,7 +135,10 @@ public class MySqlDataAccess implements DataAccess {
                 ps.executeUpdate();
 
                 var rs = ps.getGeneratedKeys();
-                int gameID = rs.getInt(1);
+                int gameID = 0;
+                if (rs.next()) {
+                    gameID = rs.getInt(1);
+                }
 
                 return new GameData(gameID, null, null, gameName, game);
             }
