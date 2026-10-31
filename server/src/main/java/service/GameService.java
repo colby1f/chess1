@@ -14,7 +14,7 @@ public class GameService {
         this.dataAccess = dataAccess;
     }
 
-    public ListGamesResult listGames(String authToken) {
+    public ListGamesResult listGames(String authToken) throws DataAccessException {
 
         dataAccess.authenticate(authToken);
 
