@@ -6,6 +6,7 @@ import model.*;
 
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.Objects;
 
 import static java.sql.Statement.RETURN_GENERATED_KEYS;
 import static java.sql.Types.NULL;
@@ -13,7 +14,7 @@ import static java.sql.Types.NULL;
 
 public class MySqlDataAccess implements DataAccess {
 
-    public MySqlDataAccess() throws DataAccessException, SQLException {
+    public MySqlDataAccess() throws DataAccessException {
         configureDatabase();
     }
 
@@ -222,34 +223,54 @@ public class MySqlDataAccess implements DataAccess {
     }
 
     @Override
-    public void login(String username, String password) {
+    public void login(String username, String password) throws DataAccessException {
+        UserData user = getUser(username);
 
+        if (user == null) {
+            throw new UnauthorizedException("Error: Unauthorized");
+        }
+
+        if (!Objects.equals(user.password(), password)) {
+            throw new UnauthorizedException("Error: Unauthorized");
+        }
     }
 
 
     private UserData readUser(ResultSet rs) throws SQLException {
-        var username = rs.getString("username");
-        var password = rs.getString("password");
-        var email = rs.getString("email");
-        return new UserData(username, password, email);
+        if (rs.next()) {
+            var username = rs.getString("username");
+            var password = rs.getString("password");
+            var email = rs.getString("email");
+            return new UserData(username, password, email);
+        }
+
+        return null;
     }
 
 
     private AuthData readAuth(ResultSet rs) throws SQLException {
-        var authToken = rs.getString("authToken");
-        var username = rs.getString("username");
-        return new AuthData(authToken, username);
+        if (rs.next()) {
+            var authToken = rs.getString("authToken");
+            var username = rs.getString("username");
+            return new AuthData(authToken, username);
+        }
+
+        return null;
     }
 
 
     private GameData readGame(ResultSet rs) throws SQLException {
-        var gameID = rs.getInt("gameID");
-        var whiteUsername = rs.getString("whiteUsername");
-        var blackUsername = rs.getString("blackUsername");
-        var gameName = rs.getString("gameName");
-        var json = rs.getString("json");
-        ChessGame game = new Gson().fromJson(json, ChessGame.class);
-        return new GameData(gameID, whiteUsername, blackUsername, gameName, game);
+        if (rs.next()) {
+            var gameID = rs.getInt("gameID");
+            var whiteUsername = rs.getString("whiteUsername");
+            var blackUsername = rs.getString("blackUsername");
+            var gameName = rs.getString("gameName");
+            var json = rs.getString("json");
+            ChessGame game = new Gson().fromJson(json, ChessGame.class);
+            return new GameData(gameID, whiteUsername, blackUsername, gameName, game);
+        }
+
+        return null;
     }
 
 

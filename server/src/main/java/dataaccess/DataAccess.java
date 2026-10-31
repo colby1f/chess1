@@ -3,7 +3,6 @@ package dataaccess;
 import chess.ChessGame;
 import model.*;
 
-import java.sql.SQLException;
 import java.util.ArrayList;
 
 public interface DataAccess {
@@ -27,7 +26,7 @@ public interface DataAccess {
 
     void clear() throws DataAccessException;
 
-    void login(String username, String password);
+    void login(String username, String password) throws DataAccessException;
 
 
 }
