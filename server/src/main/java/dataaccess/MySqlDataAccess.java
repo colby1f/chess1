@@ -3,6 +3,7 @@ package dataaccess;
 import chess.ChessGame;
 import com.google.gson.Gson;
 import model.*;
+import org.mindrot.jbcrypt.BCrypt;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -43,8 +44,10 @@ public class MySqlDataAccess implements DataAccess {
             var statement = "INSERT INTO user (username, password, email) VALUES (?, ?, ?)";
 
             try (PreparedStatement ps = conn.prepareStatement(statement)) {
+                String hashedPassword = BCrypt.hashpw(userData.password(), BCrypt.gensalt());
+
                 ps.setString(1, userData.username());
-                ps.setString(2, userData.password());
+                ps.setString(2, hashedPassword);
                 ps.setString(3, userData.email());
                 ps.executeUpdate();
             }
@@ -226,11 +229,12 @@ public class MySqlDataAccess implements DataAccess {
     public void login(String username, String password) throws DataAccessException {
         UserData user = getUser(username);
 
+
         if (user == null) {
             throw new UnauthorizedException("Error: Unauthorized");
         }
 
-        if (!Objects.equals(user.password(), password)) {
+        if (!BCrypt.checkpw(password, user.password())) {
             throw new UnauthorizedException("Error: Unauthorized");
         }
     }
