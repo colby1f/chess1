@@ -86,13 +86,39 @@ public class MySqlDataAccess implements DataAccess {
     }
 
     @Override
-    public void removeAuth(AuthData authData) {
+    public void removeAuth(AuthData authData) throws DataAccessException {
+        try (var conn = DatabaseManager.getConnection()) {
 
+            var statement = "DELETE FROM auth WHERE authToken=?";
+
+            try (PreparedStatement ps = conn.prepareStatement(statement)) {
+                ps.setString(1, authData.authToken());
+                ps.executeUpdate();
+            }
+        } catch (Exception e) {
+            throw new DataAccessException(e.getMessage());
+        }
     }
 
     @Override
-    public void authenticate(String authToken) {
+    public void authenticate(String authToken) throws DataAccessException {
+        try (var conn = DatabaseManager.getConnection()) {
 
+            var statement = "SELECT authToken FROM auth WHERE authToken=?";
+
+            try (PreparedStatement ps = conn.prepareStatement(statement)) {
+                ps.setString(1, authToken);
+                ps.executeUpdate();
+
+                try (ResultSet rs = ps.executeQuery()) {
+                    if (!rs.next()) {
+                        throw new UnauthorizedException("Error: Unauthorized");
+                    }
+                }
+            }
+        } catch (Exception e) {
+            throw new DataAccessException(e.getMessage());
+        }
     }
 
     @Override

@@ -15,9 +15,9 @@ public interface DataAccess {
 
     void addAuth(AuthData authData) throws DataAccessException;
 
-    void removeAuth(AuthData authData);
+    void removeAuth(AuthData authData) throws DataAccessException;
 
-    void authenticate(String authToken);
+    void authenticate(String authToken) throws DataAccessException;
 
     ArrayList<GameData> getGames() throws DataAccessException;
 
