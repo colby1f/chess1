@@ -25,8 +25,19 @@ public class MySqlDataAccess implements DataAccess {
 
     @Override
     public void addUser(UserData userData) throws DataAccessException {
-        var statement = "INSERT INTO user (username, password, email) VALUES (?, ?, ?)";
-        executeUpdate(statement, userData.username(), userData.password(), userData.email());
+        try (var conn = DatabaseManager.getConnection()) {
+
+            var statement = "INSERT INTO user (username, password, email) VALUES (?, ?, ?)";
+
+            try (PreparedStatement ps = conn.prepareStatement(statement)) {
+                ps.setString(1, userData.username());
+                ps.setString(2, userData.password());
+                ps.setString(3, userData.email());
+                ps.executeUpdate();
+            }
+        } catch (Exception e) {
+            throw new DataAccessException(e.getMessage());
+        }
     }
 
     @Override
@@ -36,8 +47,18 @@ public class MySqlDataAccess implements DataAccess {
 
     @Override
     public void addAuth(AuthData authData) throws DataAccessException {
-        var statement = "INSERT INTO auth (authToken, username) VALUES (?, ?)";
-        executeUpdate(statement, authData.authToken(), authData.username());
+        try (var conn = DatabaseManager.getConnection()) {
+
+            var statement = "INSERT INTO auth (authToken, username) VALUES (?, ?)";
+
+            try (PreparedStatement ps = conn.prepareStatement(statement)) {
+                ps.setString(1, authData.authToken());
+                ps.setString(2, authData.username());
+                ps.executeUpdate();
+            }
+        } catch (Exception e) {
+            throw new DataAccessException(e.getMessage());
+        }
     }
 
     @Override
@@ -57,11 +78,29 @@ public class MySqlDataAccess implements DataAccess {
 
     @Override
     public GameData addGame(String gameName) throws DataAccessException {
-        ChessGame game = new ChessGame();
-        var statement = "INSERT INTO game (whiteUsername, blackUsername, gameName, game) VALUES (?, ?, ?, ?)";
-        String json = new Gson().toJson(game);
-        int gameID = executeUpdate(statement, null, null, gameName, json);
-        return new GameData(gameID, null, null, gameName, game);
+        try (var conn = DatabaseManager.getConnection()) {
+
+            var statement = "INSERT INTO game (whiteUsername, blackUsername, gameName, game) VALUES (?, ?, ?, ?)";
+            ChessGame game = new ChessGame();
+            String json = new Gson().toJson(game);
+
+            try (PreparedStatement ps = conn.prepareStatement(statement, RETURN_GENERATED_KEYS)) {
+                ps.setNull(1, NULL);
+                ps.setNull(2, NULL);
+                ps.setString(3, gameName);
+                ps.setString(4, json);
+
+                ps.executeUpdate();
+
+                var rs = ps.getGeneratedKeys();
+                int gameID = rs.getInt(1);
+
+                return new GameData(gameID, null, null, gameName, game);
+            }
+        } catch (Exception e) {
+            throw new DataAccessException(e.getMessage());
+        }
+
     }
 
     @Override
