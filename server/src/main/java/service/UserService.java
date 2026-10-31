@@ -66,7 +66,7 @@ public class UserService {
 
     }
 
-    public void logout(String authToken) {
+    public void logout(String authToken) throws DataAccessException {
 
         dataAccess.authenticate(authToken);
 
