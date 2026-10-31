@@ -175,8 +175,38 @@ public class MySqlDataAccess implements DataAccess {
     }
 
     @Override
-    public void addPlayer(String authToken, ChessGame.TeamColor playerColor, Integer gameID) throws AlreadyTakenException {
+    public void addPlayer(String authToken, ChessGame.TeamColor playerColor, Integer gameID) throws DataAccessException {
+        try (var conn = DatabaseManager.getConnection()) {
 
+            var statement1 = "SELECT whiteUsername, blackUsername FROM game WHERE gameID = ?";
+            var statement2 = "UPDATE game SET whiteUsername = ? WHERE gameID = ?";
+            int usernamePosition = 1;
+            if (playerColor == ChessGame.TeamColor.BLACK) {
+                statement2 = "UPDATE game SET blackUsername = ? WHERE gameID = ?";
+                usernamePosition = 2;
+            }
+
+            try (PreparedStatement ps = conn.prepareStatement(statement1)) {
+                ps.setInt(1, gameID);
+
+                ps.executeUpdate();
+                try (ResultSet rs = ps.executeQuery()) {
+                    if (rs.getString(usernamePosition) != null) {
+                        throw new AlreadyTakenException("Error: Already Taken");
+                    }
+                }
+
+            }
+
+            try (PreparedStatement ps = conn.prepareStatement(statement2)) {
+                ps.setString(1, getAuth(authToken).username());
+                ps.setNull(2, gameID);
+
+                ps.executeUpdate();
+            }
+        } catch (Exception e) {
+            throw new DataAccessException(e.getMessage());
+        }
     }
 
     @Override
@@ -223,7 +253,7 @@ public class MySqlDataAccess implements DataAccess {
     }
 
 
-    private int executeUpdate(String statement, Object... parameters) throws DataAccessException {
+    private void executeUpdate(String statement, Object... parameters) throws DataAccessException {
         try (Connection conn = DatabaseManager.getConnection()) {
             try (PreparedStatement ps = conn.prepareStatement(statement, RETURN_GENERATED_KEYS)) {
                 for (int i = 0; i < parameters.length; i++) {
@@ -242,10 +272,9 @@ public class MySqlDataAccess implements DataAccess {
 
                 ResultSet rs = ps.getGeneratedKeys();
                 if (rs.next()) {
-                    return rs.getInt(1);
+                    rs.getInt(1);
                 }
 
-                return 0;
             }
         } catch (SQLException e) {
             throw new DataAccessException(e.getMessage());

@@ -23,7 +23,7 @@ public interface DataAccess {
 
     GameData addGame(String gameName) throws DataAccessException;
 
-    void addPlayer(String authToken, ChessGame.TeamColor playerColor, Integer gameID) throws AlreadyTakenException;
+    void addPlayer(String authToken, ChessGame.TeamColor playerColor, Integer gameID) throws AlreadyTakenException, DataAccessException;
 
     void clear() throws DataAccessException;
 
