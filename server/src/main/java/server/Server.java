@@ -18,7 +18,7 @@ public class Server {
 
     public Server() {
 
-        DataAccess dataAccess = null;
+        DataAccess dataAccess;
 
         try {
             dataAccess = new MySqlDataAccess();
