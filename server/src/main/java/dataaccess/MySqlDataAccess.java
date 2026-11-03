@@ -309,27 +309,27 @@ public class MySqlDataAccess implements DataAccess {
     private final String[] createStatements = {
             """
             CREATE TABLE IF NOT EXISTS user(
-            'username' VARCHAR(255) NOT NULL,
-            'password' VARCHAR(255) NOT NULL,
-            'email' VARCHAR(255) NOT NULL,
-            PRIMARY KEY ('username')
+            username VARCHAR(255) NOT NULL,
+            password VARCHAR(255) NOT NULL,
+            email VARCHAR(255) NOT NULL,
+            PRIMARY KEY (username)
             )
             """,
             """
             CREATE TABLE IF NOT EXISTS game(
-            'gameID' INT NOT NULL AUTO_INCREMENT,
-            'whiteUsername' VARCHAR(255) DEFAULT NULL,
-            'blackUsername' VARCHAR(255) DEFAULT NULL,
-            'gameName' VARCHAR(255) NOT NULL,
-            'game' VARCHAR(65535) NOT NULL,
-            PRIMARY KEY ('gameID')
+            gameID INT NOT NULL AUTO_INCREMENT,
+            whiteUsername VARCHAR(255) DEFAULT NULL,
+            blackUsername VARCHAR(255) DEFAULT NULL,
+            gameName VARCHAR(255) NOT NULL,
+            game TEXT NOT NULL,
+            PRIMARY KEY (gameID)
             )
             """,
             """
             CREATE TABLE IF NOT EXISTS auth(
-            'authToken' VARCHAR(255) NOT NULL,
-            'username' VARCHAR(255) NOT NULL,
-            PRIMARY KEY ('authToken')
+            authToken VARCHAR(255) NOT NULL,
+            username VARCHAR(255) NOT NULL,
+            PRIMARY KEY (authToken)
             )
             """
 
