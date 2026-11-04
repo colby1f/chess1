@@ -19,7 +19,7 @@ public class SQLTests {
     void registerSuccess() throws AlreadyTakenException, DataAccessException {
         var registerRequest = new RegisterRequest("Darrow", "Reaper", "Darrow@mars.com");
         var user = new UserData("Darrow", "Reaper", "Darrow@mars.com");
-        var dataAccess = new MemoryDataAccess();
+        var dataAccess = new MySqlDataAccess();
         var service = new UserService(dataAccess);
         service.register(registerRequest);
 
@@ -27,12 +27,12 @@ public class SQLTests {
     }
 
     @Test
-    void registerBadRequest() {
+    void registerBadRequest() throws DataAccessException {
         RegisterRequest registerRequest1 = new RegisterRequest("Darrow", "Reaper", null);
         RegisterRequest registerRequest2 = new RegisterRequest("Virginia", null, "Virginia@mars.com");
         RegisterRequest registerRequest3 = new RegisterRequest(null, "Goblin", "Sevro@mars.com");
 
-        var dataAccess = new MemoryDataAccess();
+        var dataAccess = new MySqlDataAccess();
         var service = new UserService(dataAccess);
 
         assertThrows(DataAccessException.class, () -> service.register(registerRequest1));
@@ -41,11 +41,11 @@ public class SQLTests {
     }
 
     @Test
-    void registerAlreadyTaken() {
+    void registerAlreadyTaken() throws DataAccessException {
         RegisterRequest registerRequest1 = new RegisterRequest("Darrow", "Reaper", "Darrow@mars.com");
         RegisterRequest registerRequest2 = new RegisterRequest("Darrow", "Brother", "Reaper@mars.com");
 
-        var dataAccess = new MemoryDataAccess();
+        var dataAccess = new MySqlDataAccess();
         var service = new UserService(dataAccess);
 
 
@@ -61,7 +61,7 @@ public class SQLTests {
         RegisterRequest registerRequest = new RegisterRequest("Darrow", "Reaper", "Darrow@mars.com");
         CreateGameRequest createGameRequest = new CreateGameRequest("Institute");
 
-        var dataAccess = new MemoryDataAccess();
+        var dataAccess = new MySqlDataAccess();
         var userService = new UserService(dataAccess);
         var gameService = new GameService(dataAccess);
         var generalService = new GeneralService(dataAccess);
@@ -83,7 +83,7 @@ public class SQLTests {
     void loginSuccess() throws AlreadyTakenException, DataAccessException {
         var registerRequest = new RegisterRequest("Darrow", "Reaper", "Darrow@mars.com");
 
-        var dataAccess = new MemoryDataAccess();
+        var dataAccess = new MySqlDataAccess();
         var service = new UserService(dataAccess);
         RegisterResult registerResult = service.register(registerRequest);
 
@@ -100,7 +100,7 @@ public class SQLTests {
     void loginBadRequest() throws AlreadyTakenException, DataAccessException {
         var registerRequest = new RegisterRequest("Darrow", "Reaper", "Darrow@mars.com");
 
-        var dataAccess = new MemoryDataAccess();
+        var dataAccess = new MySqlDataAccess();
         var service = new UserService(dataAccess);
         RegisterResult registerResult = service.register(registerRequest);
 
@@ -118,7 +118,7 @@ public class SQLTests {
     void loginUnauthorized() throws AlreadyTakenException, DataAccessException {
         var registerRequest = new RegisterRequest("Darrow", "Reaper", "Darrow@mars.com");
 
-        var dataAccess = new MemoryDataAccess();
+        var dataAccess = new MySqlDataAccess();
         var service = new UserService(dataAccess);
         RegisterResult registerResult = service.register(registerRequest);
 
@@ -135,7 +135,7 @@ public class SQLTests {
     void logoutTwice() throws AlreadyTakenException, DataAccessException {
         var registerRequest = new RegisterRequest("Darrow", "Reaper", "Darrow@mars.com");
 
-        var dataAccess = new MemoryDataAccess();
+        var dataAccess = new MySqlDataAccess();
         var service = new UserService(dataAccess);
         RegisterResult registerResult = service.register(registerRequest);
 
@@ -149,7 +149,7 @@ public class SQLTests {
 
         var registerRequest = new RegisterRequest("Darrow", "Reaper", "Darrow@mars.com");
 
-        var dataAccess = new MemoryDataAccess();
+        var dataAccess = new MySqlDataAccess();
         var userService = new UserService(dataAccess);
 
         RegisterResult registerResult = userService.register(registerRequest);
@@ -174,7 +174,7 @@ public class SQLTests {
     void listGamesUnauthorized() throws AlreadyTakenException, DataAccessException {
         var registerRequest = new RegisterRequest("Darrow", "Reaper", "Darrow@mars.com");
 
-        var dataAccess = new MemoryDataAccess();
+        var dataAccess = new MySqlDataAccess();
         var userService = new UserService(dataAccess);
 
         RegisterResult registerResult = userService.register(registerRequest);
@@ -196,7 +196,7 @@ public class SQLTests {
     void createGameBadRequest() throws AlreadyTakenException, DataAccessException {
         var registerRequest = new RegisterRequest("Darrow", "Reaper", "Darrow@mars.com");
 
-        var dataAccess = new MemoryDataAccess();
+        var dataAccess = new MySqlDataAccess();
         var userService = new UserService(dataAccess);
 
         RegisterResult registerResult = userService.register(registerRequest);
@@ -209,9 +209,9 @@ public class SQLTests {
     }
 
     @Test
-    void createGameUnauthorized() {
+    void createGameUnauthorized() throws DataAccessException {
 
-        var dataAccess = new MemoryDataAccess();
+        var dataAccess = new MySqlDataAccess();
 
         var gameService = new GameService(dataAccess);
 
@@ -225,7 +225,7 @@ public class SQLTests {
     void joinGameSuccess() throws AlreadyTakenException, DataAccessException {
         var registerRequest = new RegisterRequest("Darrow", "Reaper", "Darrow@mars.com");
 
-        var dataAccess = new MemoryDataAccess();
+        var dataAccess = new MySqlDataAccess();
         var userService = new UserService(dataAccess);
 
         RegisterResult registerResult = userService.register(registerRequest);
@@ -249,7 +249,7 @@ public class SQLTests {
     void joinGameBadRequest() throws DataAccessException, AlreadyTakenException {
         var registerRequest = new RegisterRequest("Darrow", "Reaper", "Darrow@mars.com");
 
-        var dataAccess = new MemoryDataAccess();
+        var dataAccess = new MySqlDataAccess();
         var userService = new UserService(dataAccess);
 
         RegisterResult registerResult = userService.register(registerRequest);
@@ -270,7 +270,7 @@ public class SQLTests {
     void joinGameUnauthorized() throws DataAccessException, AlreadyTakenException {
         var registerRequest = new RegisterRequest("Darrow", "Reaper", "Darrow@mars.com");
 
-        var dataAccess = new MemoryDataAccess();
+        var dataAccess = new MySqlDataAccess();
         var userService = new UserService(dataAccess);
 
         RegisterResult registerResult = userService.register(registerRequest);
