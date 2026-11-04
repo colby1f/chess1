@@ -2,285 +2,157 @@ package dataaccess.sql;
 
 import chess.ChessGame;
 import dataaccess.AlreadyTakenException;
+import dataaccess.DataAccess;
 import dataaccess.DataAccessException;
 import dataaccess.UnauthorizedException;
-import model.GameData;
+import model.AuthData;
 import model.UserData;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import service.*;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class SQLTests {
 
-    @Test
-    void registerSuccess() throws AlreadyTakenException, DataAccessException {
-        var registerRequest = new RegisterRequest("Darrow", "Reaper", "Darrow@mars.com");
-        var user = new UserData("Darrow", "Reaper", "Darrow@mars.com");
-        var dataAccess = new MySqlDataAccess();
-        var service = new UserService(dataAccess);
-        service.register(registerRequest);
+    private static DataAccess dataAccess;
 
-        assertEquals(dataAccess.getUser("Darrow"), user);
+    @BeforeAll
+    static void openDAO() throws DataAccessException {
+        dataAccess = new MySqlDataAccess();
+    }
+
+    @AfterEach
+    void clear() throws DataAccessException {
+        dataAccess.clear();
     }
 
     @Test
-    void registerBadRequest() throws DataAccessException {
-        RegisterRequest registerRequest1 = new RegisterRequest("Darrow", "Reaper", null);
-        RegisterRequest registerRequest2 = new RegisterRequest("Virginia", null, "Virginia@mars.com");
-        RegisterRequest registerRequest3 = new RegisterRequest(null, "Goblin", "Sevro@mars.com");
+    void addUser() throws DataAccessException {
 
-        var dataAccess = new MySqlDataAccess();
-        var service = new UserService(dataAccess);
+        var userData = new UserData("Darrow", "Reaper", "Darrow@mars.com");
 
-        assertThrows(DataAccessException.class, () -> service.register(registerRequest1));
-        assertThrows(DataAccessException.class, () -> service.register(registerRequest2));
-        assertThrows(DataAccessException.class, () -> service.register(registerRequest3));
-    }
+        dataAccess.addUser(userData);
 
-    @Test
-    void registerAlreadyTaken() throws DataAccessException {
-        RegisterRequest registerRequest1 = new RegisterRequest("Darrow", "Reaper", "Darrow@mars.com");
-        RegisterRequest registerRequest2 = new RegisterRequest("Darrow", "Brother", "Reaper@mars.com");
+        var userDataNew = dataAccess.getUser("Darrow");
 
-        var dataAccess = new MySqlDataAccess();
-        var service = new UserService(dataAccess);
-
-
-        assertThrows(AlreadyTakenException.class, () -> {
-            service.register(registerRequest1);
-            service.register(registerRequest2);
-        });
-    }
-
-
-    @Test
-    void clearSuccess() throws AlreadyTakenException, DataAccessException {
-        RegisterRequest registerRequest = new RegisterRequest("Darrow", "Reaper", "Darrow@mars.com");
-        CreateGameRequest createGameRequest = new CreateGameRequest("Institute");
-
-        var dataAccess = new MySqlDataAccess();
-        var userService = new UserService(dataAccess);
-        var gameService = new GameService(dataAccess);
-        var generalService = new GeneralService(dataAccess);
-
-        RegisterResult registerResult = userService.register(registerRequest);
-        CreateGameResult createGameResult = gameService.createGame(createGameRequest, registerResult.authToken());
-
-        JoinGameRequest joinGameRequest = new JoinGameRequest(ChessGame.TeamColor.WHITE, createGameResult.gameID());
-
-        gameService.joinGame(joinGameRequest, registerResult.authToken());
-
-        generalService.clear();
-
-        assertThrows(UnauthorizedException.class, () -> gameService.listGames(registerResult.authToken()));
-        assertThrows(UnauthorizedException.class, () -> userService.logout(registerResult.authToken()));
-    }
-
-    @Test
-    void loginSuccess() throws AlreadyTakenException, DataAccessException {
-        var registerRequest = new RegisterRequest("Darrow", "Reaper", "Darrow@mars.com");
-
-        var dataAccess = new MySqlDataAccess();
-        var service = new UserService(dataAccess);
-        RegisterResult registerResult = service.register(registerRequest);
-
-        service.logout(registerResult.authToken());
-
-        var loginRequest = new LoginRequest("Darrow", "Reaper");
-        LoginResult loginResult = service.login(loginRequest);
-
-        assertEquals("Darrow", loginResult.username());
-
-    }
-
-    @Test
-    void loginBadRequest() throws AlreadyTakenException, DataAccessException {
-        var registerRequest = new RegisterRequest("Darrow", "Reaper", "Darrow@mars.com");
-
-        var dataAccess = new MySqlDataAccess();
-        var service = new UserService(dataAccess);
-        RegisterResult registerResult = service.register(registerRequest);
-
-        service.logout(registerResult.authToken());
-
-        var loginRequest1 = new LoginRequest(null, "Reaper");
-        var loginRequest2 = new LoginRequest("Darrow", null);
-
-        assertThrows(DataAccessException.class, () -> service.login(loginRequest1));
-        assertThrows(DataAccessException.class, () -> service.login(loginRequest2));
-    }
-
-
-    @Test
-    void loginUnauthorized() throws AlreadyTakenException, DataAccessException {
-        var registerRequest = new RegisterRequest("Darrow", "Reaper", "Darrow@mars.com");
-
-        var dataAccess = new MySqlDataAccess();
-        var service = new UserService(dataAccess);
-        RegisterResult registerResult = service.register(registerRequest);
-
-        service.logout(registerResult.authToken());
-
-        var loginRequest1 = new LoginRequest("D", "Reaper");
-        var loginRequest2 = new LoginRequest("Darrow", "R");
-
-        assertThrows(UnauthorizedException.class, () -> service.login(loginRequest1));
-        assertThrows(UnauthorizedException.class, () -> service.login(loginRequest2));
-    }
-
-    @Test
-    void logoutTwice() throws AlreadyTakenException, DataAccessException {
-        var registerRequest = new RegisterRequest("Darrow", "Reaper", "Darrow@mars.com");
-
-        var dataAccess = new MySqlDataAccess();
-        var service = new UserService(dataAccess);
-        RegisterResult registerResult = service.register(registerRequest);
-
-        service.logout(registerResult.authToken());
-
-        assertThrows(UnauthorizedException.class, () -> service.logout(registerResult.authToken()));
-    }
-
-    @Test
-    void listGamesSuccess() throws AlreadyTakenException, DataAccessException {
-
-        var registerRequest = new RegisterRequest("Darrow", "Reaper", "Darrow@mars.com");
-
-        var dataAccess = new MySqlDataAccess();
-        var userService = new UserService(dataAccess);
-
-        RegisterResult registerResult = userService.register(registerRequest);
-
-        var gameService = new GameService(dataAccess);
-
-        CreateGameRequest createGameRequest1 = new CreateGameRequest("first");
-        CreateGameRequest createGameRequest2 = new CreateGameRequest("second");
-
-        CreateGameResult createGameResult1 = gameService.createGame(createGameRequest1, registerResult.authToken());
-        CreateGameResult createGameResult2 = gameService.createGame(createGameRequest2, registerResult.authToken());
-
-        ListGamesResult listGamesResult = gameService.listGames(registerResult.authToken());
-
-        java.util.ArrayList<GameData> games = listGamesResult.games();
-
-        assertEquals(createGameResult1.gameID(), games.getFirst().gameID());
-        assertEquals(createGameResult2.gameID(), games.get(1).gameID());
-    }
-
-    @Test
-    void listGamesUnauthorized() throws AlreadyTakenException, DataAccessException {
-        var registerRequest = new RegisterRequest("Darrow", "Reaper", "Darrow@mars.com");
-
-        var dataAccess = new MySqlDataAccess();
-        var userService = new UserService(dataAccess);
-
-        RegisterResult registerResult = userService.register(registerRequest);
-
-        var gameService = new GameService(dataAccess);
-
-        CreateGameRequest createGameRequest1 = new CreateGameRequest("first");
-        CreateGameRequest createGameRequest2 = new CreateGameRequest("second");
-
-        gameService.createGame(createGameRequest1, registerResult.authToken());
-        gameService.createGame(createGameRequest2, registerResult.authToken());
-
-        assertThrows(UnauthorizedException.class, () -> gameService.listGames("hello"));
+        assertEquals("Darrow", userDataNew.username());
 
     }
 
 
     @Test
-    void createGameBadRequest() throws AlreadyTakenException, DataAccessException {
-        var registerRequest = new RegisterRequest("Darrow", "Reaper", "Darrow@mars.com");
+    void addAuth() throws DataAccessException {
 
-        var dataAccess = new MySqlDataAccess();
-        var userService = new UserService(dataAccess);
+        var authData = new AuthData("Mars", "Darrow");
 
-        RegisterResult registerResult = userService.register(registerRequest);
+        dataAccess.addAuth(authData);
 
-        var gameService = new GameService(dataAccess);
+        var authDataNew = dataAccess.getAuth("Mars");
 
-        CreateGameRequest createGameRequest1 = new CreateGameRequest(null);
+        assertEquals("Darrow", authDataNew.username());
 
-        assertThrows(DataAccessException.class, () -> gameService.createGame(createGameRequest1, registerResult.authToken()));
-    }
-
-    @Test
-    void createGameUnauthorized() throws DataAccessException {
-
-        var dataAccess = new MySqlDataAccess();
-
-        var gameService = new GameService(dataAccess);
-
-        CreateGameRequest createGameRequest1 = new CreateGameRequest("game");
-
-        assertThrows(UnauthorizedException.class, () -> gameService.createGame(createGameRequest1, "secret"));
     }
 
 
     @Test
-    void joinGameSuccess() throws AlreadyTakenException, DataAccessException {
-        var registerRequest = new RegisterRequest("Darrow", "Reaper", "Darrow@mars.com");
+    void removeAuth() throws DataAccessException {
 
-        var dataAccess = new MySqlDataAccess();
-        var userService = new UserService(dataAccess);
+        var authData = new AuthData("Mars", "Darrow");
 
-        RegisterResult registerResult = userService.register(registerRequest);
+        dataAccess.addAuth(authData);
 
-        var gameService = new GameService(dataAccess);
+        var authDataNew = dataAccess.getAuth("Mars");
 
-        CreateGameRequest createGameRequest = new CreateGameRequest("first");
-        CreateGameResult createGameResult = gameService.createGame(createGameRequest, registerResult.authToken());
+        dataAccess.removeAuth(authDataNew);
 
-        JoinGameRequest joinGameRequest = new JoinGameRequest(ChessGame.TeamColor.WHITE, createGameResult.gameID());
-        gameService.joinGame(joinGameRequest, registerResult.authToken());
+        assertNull(dataAccess.getAuth("Mars"));
 
-        java.util.ArrayList<GameData> games = gameService.listGames(registerResult.authToken()).games();
-        GameData game = games.getFirst();
+    }
+
+
+    @Test
+    void authenticate() throws DataAccessException {
+
+        var authData = new AuthData("Mars", "Darrow");
+
+        dataAccess.addAuth(authData);
+
+        assertDoesNotThrow(() -> dataAccess.authenticate("Mars"));
+
+    }
+
+
+    @Test
+    void addGame() throws DataAccessException {
+
+        dataAccess.addGame("Institute");
+
+        var games = dataAccess.getGames();
+
+        var game = games.getFirst();
+
+        assertEquals("Institute", game.gameName());
+
+    }
+
+
+    @Test
+    void addPlayer() throws DataAccessException, AlreadyTakenException {
+
+        var authData = new AuthData("Mars", "Darrow");
+        dataAccess.addAuth(authData);
+
+        var gameData = dataAccess.addGame("Institute");
+
+        dataAccess.addPlayer(authData.authToken(), ChessGame.TeamColor.WHITE, gameData.gameID());
+
+        var games = dataAccess.getGames();
+
+        var game = games.getFirst();
 
         assertEquals("Darrow", game.whiteUsername());
 
     }
 
+
     @Test
-    void joinGameBadRequest() throws DataAccessException, AlreadyTakenException {
-        var registerRequest = new RegisterRequest("Darrow", "Reaper", "Darrow@mars.com");
+    void addPlayerAlreadyTaken() throws DataAccessException, AlreadyTakenException {
 
-        var dataAccess = new MySqlDataAccess();
-        var userService = new UserService(dataAccess);
+        var authData1 = new AuthData("Mars", "Darrow");
+        dataAccess.addAuth(authData1);
 
-        RegisterResult registerResult = userService.register(registerRequest);
+        var authData2 = new AuthData("Luna", "Mustang");
+        dataAccess.addAuth(authData2);
 
-        var gameService = new GameService(dataAccess);
+        var gameData = dataAccess.addGame("Institute");
 
-        CreateGameRequest createGameRequest = new CreateGameRequest("first");
-        CreateGameResult createGameResult = gameService.createGame(createGameRequest, registerResult.authToken());
+        dataAccess.addPlayer(authData1.authToken(), ChessGame.TeamColor.WHITE, gameData.gameID());
 
-        JoinGameRequest joinGameRequest1 = new JoinGameRequest(ChessGame.TeamColor.WHITE, null);
-        JoinGameRequest joinGameRequest2 = new JoinGameRequest(null, createGameResult.gameID());
+        assertThrows(AlreadyTakenException.class, () -> dataAccess.addPlayer(authData2.authToken(), ChessGame.TeamColor.WHITE, gameData.gameID()));
 
-        assertThrows(DataAccessException.class, () -> gameService.joinGame(joinGameRequest1, registerResult.authToken()));
-        assertThrows(DataAccessException.class, () -> gameService.joinGame(joinGameRequest2, registerResult.authToken()));
+    }
+
+
+    @Test
+    void login() throws DataAccessException {
+
+        var userData = new UserData("Darrow", "Reaper", "Darrow@mars.com");
+
+        dataAccess.addUser(userData);
+
+        assertDoesNotThrow(() -> dataAccess.login("Darrow", "Reaper"));
     }
 
     @Test
-    void joinGameUnauthorized() throws DataAccessException, AlreadyTakenException {
-        var registerRequest = new RegisterRequest("Darrow", "Reaper", "Darrow@mars.com");
+    void loginUnauthorized() throws DataAccessException {
 
-        var dataAccess = new MySqlDataAccess();
-        var userService = new UserService(dataAccess);
+        var userData = new UserData("Darrow", "Reaper", "Darrow@mars.com");
 
-        RegisterResult registerResult = userService.register(registerRequest);
+        dataAccess.addUser(userData);
 
-        var gameService = new GameService(dataAccess);
-
-        CreateGameRequest createGameRequest = new CreateGameRequest("first");
-        CreateGameResult createGameResult = gameService.createGame(createGameRequest, registerResult.authToken());
-
-        JoinGameRequest joinGameRequest = new JoinGameRequest(ChessGame.TeamColor.WHITE, createGameResult.gameID());
-
-        assertThrows(UnauthorizedException.class, () -> gameService.joinGame(joinGameRequest, "hello"));
+        assertThrows(UnauthorizedException.class, () -> dataAccess.login("Mustang", "Reaper"));
     }
+
 }
