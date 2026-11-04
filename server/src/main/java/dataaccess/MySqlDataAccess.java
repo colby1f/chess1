@@ -20,7 +20,7 @@ public class MySqlDataAccess implements DataAccess {
 
 
     @Override
-    public UserData getUser(String username) throws DataAccessException {
+    public UserData getUser(String username) {
         try (var conn = DatabaseManager.getConnection()) {
 
             var statement = "SELECT username, password, email FROM user WHERE username=?";
@@ -32,12 +32,12 @@ public class MySqlDataAccess implements DataAccess {
                 }
             }
         } catch (Exception e) {
-            throw new DataAccessException(e.getMessage());
+            throw new RuntimeException(e.getMessage());
         }
     }
 
     @Override
-    public void addUser(UserData userData) throws DataAccessException {
+    public void addUser(UserData userData) {
         try (var conn = DatabaseManager.getConnection()) {
 
             var statement = "INSERT INTO user (username, password, email) VALUES (?, ?, ?)";
@@ -51,12 +51,12 @@ public class MySqlDataAccess implements DataAccess {
                 ps.executeUpdate();
             }
         } catch (Exception e) {
-            throw new DataAccessException(e.getMessage());
+            throw new RuntimeException(e.getMessage());
         }
     }
 
     @Override
-    public AuthData getAuth(String authToken) throws DataAccessException {
+    public AuthData getAuth(String authToken) {
         try (var conn = DatabaseManager.getConnection()) {
 
             var statement = "SELECT authToken, username FROM auth WHERE authToken=?";
@@ -68,7 +68,7 @@ public class MySqlDataAccess implements DataAccess {
                 }
             }
         } catch (Exception e) {
-            throw new DataAccessException(e.getMessage());
+            throw new RuntimeException(e.getMessage());
         }
     }
 
@@ -84,12 +84,12 @@ public class MySqlDataAccess implements DataAccess {
                 ps.executeUpdate();
             }
         } catch (Exception e) {
-            throw new DataAccessException(e.getMessage());
+            throw new RuntimeException(e.getMessage());
         }
     }
 
     @Override
-    public void removeAuth(AuthData authData) throws DataAccessException {
+    public void removeAuth(AuthData authData) {
         try (var conn = DatabaseManager.getConnection()) {
 
             var statement = "DELETE FROM auth WHERE authToken=?";
@@ -99,19 +99,18 @@ public class MySqlDataAccess implements DataAccess {
                 ps.executeUpdate();
             }
         } catch (Exception e) {
-            throw new DataAccessException(e.getMessage());
+            throw new RuntimeException(e.getMessage());
         }
     }
 
     @Override
-    public void authenticate(String authToken) throws DataAccessException {
+    public void authenticate(String authToken) {
         try (var conn = DatabaseManager.getConnection()) {
 
-            var statement = "SELECT authToken FROM auth WHERE authToken=?";
+            var statement = "SELECT authToken, username FROM auth WHERE authToken=?";
 
             try (PreparedStatement ps = conn.prepareStatement(statement)) {
                 ps.setString(1, authToken);
-                ps.executeUpdate();
 
                 try (ResultSet rs = ps.executeQuery()) {
                     if (!rs.next()) {
@@ -119,13 +118,13 @@ public class MySqlDataAccess implements DataAccess {
                     }
                 }
             }
-        } catch (Exception e) {
-            throw new DataAccessException(e.getMessage());
+        } catch (DataAccessException | SQLException e) {
+            throw new RuntimeException(e.getMessage());
         }
     }
 
     @Override
-    public ArrayList<GameData> getGames() throws DataAccessException {
+    public ArrayList<GameData> getGames() {
         ArrayList<GameData> games = new ArrayList<>();
 
         try (var conn = DatabaseManager.getConnection()) {
@@ -143,12 +142,12 @@ public class MySqlDataAccess implements DataAccess {
                 }
             }
         } catch (Exception e) {
-            throw new DataAccessException(e.getMessage());
+            throw new RuntimeException(e.getMessage());
         }
     }
 
     @Override
-    public GameData addGame(String gameName) throws DataAccessException {
+    public GameData addGame(String gameName) {
         try (var conn = DatabaseManager.getConnection()) {
 
             var statement = "INSERT INTO game (whiteUsername, blackUsername, gameName, game) VALUES (?, ?, ?, ?)";
@@ -172,29 +171,29 @@ public class MySqlDataAccess implements DataAccess {
                 return new GameData(gameID, null, null, gameName, game);
             }
         } catch (Exception e) {
-            throw new DataAccessException(e.getMessage());
+            throw new RuntimeException(e.getMessage());
         }
 
     }
 
     @Override
-    public void addPlayer(String authToken, ChessGame.TeamColor playerColor, Integer gameID) throws DataAccessException {
+    public void addPlayer(String authToken, ChessGame.TeamColor playerColor, Integer gameID) throws AlreadyTakenException {
         try (var conn = DatabaseManager.getConnection()) {
 
             var statement1 = "SELECT whiteUsername, blackUsername FROM game WHERE gameID = ?";
             var statement2 = "UPDATE game SET whiteUsername = ? WHERE gameID = ?";
-            int usernamePosition = 1;
+            String usernameToFind = "whiteUsername";
             if (playerColor == ChessGame.TeamColor.BLACK) {
                 statement2 = "UPDATE game SET blackUsername = ? WHERE gameID = ?";
-                usernamePosition = 2;
+                usernameToFind = "blackUsername";
             }
 
             try (PreparedStatement ps = conn.prepareStatement(statement1)) {
                 ps.setInt(1, gameID);
 
-                ps.executeUpdate();
                 try (ResultSet rs = ps.executeQuery()) {
-                    if (rs.getString(usernamePosition) != null) {
+                    rs.next();
+                    if (rs.getString(usernameToFind) != null) {
                         throw new AlreadyTakenException("Error: Already Taken");
                     }
                 }
@@ -203,12 +202,12 @@ public class MySqlDataAccess implements DataAccess {
 
             try (PreparedStatement ps = conn.prepareStatement(statement2)) {
                 ps.setString(1, getAuth(authToken).username());
-                ps.setNull(2, gameID);
+                ps.setInt(2, gameID);
 
                 ps.executeUpdate();
             }
-        } catch (Exception e) {
-            throw new DataAccessException(e.getMessage());
+        } catch (DataAccessException | SQLException e) {
+            throw new RuntimeException(e.getMessage());
         }
     }
 
@@ -263,17 +262,13 @@ public class MySqlDataAccess implements DataAccess {
 
 
     private GameData readGame(ResultSet rs) throws SQLException {
-        if (rs.next()) {
-            var gameID = rs.getInt("gameID");
-            var whiteUsername = rs.getString("whiteUsername");
-            var blackUsername = rs.getString("blackUsername");
-            var gameName = rs.getString("gameName");
-            var json = rs.getString("json");
-            ChessGame game = new Gson().fromJson(json, ChessGame.class);
-            return new GameData(gameID, whiteUsername, blackUsername, gameName, game);
-        }
-
-        return null;
+        var gameID = rs.getInt("gameID");
+        var whiteUsername = rs.getString("whiteUsername");
+        var blackUsername = rs.getString("blackUsername");
+        var gameName = rs.getString("gameName");
+        var json = rs.getString("game");
+        ChessGame game = new Gson().fromJson(json, ChessGame.class);
+        return new GameData(gameID, whiteUsername, blackUsername, gameName, game);
     }
 
 
@@ -301,7 +296,7 @@ public class MySqlDataAccess implements DataAccess {
 
             }
         } catch (SQLException e) {
-            throw new DataAccessException(e.getMessage());
+            throw new RuntimeException(e.getMessage());
         }
     }
 
