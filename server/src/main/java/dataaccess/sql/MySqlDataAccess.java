@@ -74,7 +74,7 @@ public class MySqlDataAccess implements DataAccess {
     }
 
     @Override
-    public void addAuth(AuthData authData) throws DataAccessException {
+    public void addAuth(AuthData authData) {
         try (var conn = DatabaseManager.getConnection()) {
 
             var statement = "INSERT INTO auth (authToken, username) VALUES (?, ?)";
