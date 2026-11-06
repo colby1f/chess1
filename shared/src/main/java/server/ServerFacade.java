@@ -1,6 +1,7 @@
 package server;
 
 import com.google.gson.Gson;
+import jdk.jshell.spi.ExecutionControl;
 
 import java.net.*;
 import java.net.http.*;
@@ -37,6 +38,18 @@ public class ServerFacade {
             return BodyPublishers.ofString(new Gson().toJson(request));
         } else {
             return BodyPublishers.noBody();
+        }
+    }
+
+
+
+    private HttpResponse<String> sendRequest(HttpRequest request) {
+        try {
+            return client.send(request, BodyHandlers.ofString());
+        } catch (Exception e) {
+            // FIX THIS!!!
+            throw new RuntimeException();
+            // FIX THIS!!!
         }
     }
 
