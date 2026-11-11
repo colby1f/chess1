@@ -40,6 +40,7 @@ public class LoggedOutClient implements Client {
     public String login(String... params) {
         if (params.length == 2) {
             repl.setState("Logged In");
+            // SERVER CALL HERE
             return String.format("Logged in as %s", params[0]);
         }
         throw new ResponseException("Expected: <username> <password>");

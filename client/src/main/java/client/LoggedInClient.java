@@ -1,11 +1,15 @@
 package client;
 
+import server.ServerFacade;
+
 public class LoggedInClient implements Client {
 
     private final Repl repl;
+    private final ServerFacade server;
 
-    public LoggedInClient(Repl repl) {
+    public LoggedInClient(Repl repl, String serverUrl) {
         this.repl = repl;
+        server = new ServerFacade(serverUrl);
     }
 
 

@@ -1,11 +1,15 @@
 package client;
 
+import server.ServerFacade;
+
 public class InGameClient implements Client {
 
     private final Repl repl;
+    private final ServerFacade server;
 
-    public InGameClient(Repl repl) {
+    public InGameClient(Repl repl, String serverUrl) {
         this.repl = repl;
+        server = new ServerFacade(serverUrl);
     }
 
 

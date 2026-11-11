@@ -7,11 +7,13 @@ import ui.EscapeSequences;
 
 public class Repl {
 
+    private final String url;
     private Client client;
     private String state;
 
     public Repl(String serverUrl) {
-        client = new LoggedOutClient(this);
+        url = serverUrl;
+        client = new LoggedOutClient(this, url);
         state = "Logged Out";
     }
 
@@ -43,11 +45,11 @@ public class Repl {
     public void setState(String newClient) {
         state = newClient;
         if (Objects.equals(newClient, "Logged Out")) {
-            client = new LoggedOutClient(this);
+            client = new LoggedOutClient(this, url);
         } else if (Objects.equals(newClient, "Logged In")) {
-            client = new LoggedInClient(this);
+            client = new LoggedInClient(this, url);
         } else if (Objects.equals(newClient, "Game")) {
-            client = new InGameClient(this);
+            client = new InGameClient(this, url);
         }
     }
 }
