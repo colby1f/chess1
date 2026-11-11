@@ -1,12 +1,13 @@
 package client;
 
+import java.util.Objects;
 import java.util.Scanner;
 
 import ui.EscapeSequences;
 
 public class Repl {
 
-    private final Client client;
+    private Client client;
 
     public Repl(String serverUrl) {
         client = new LoggedOutClient();
@@ -35,5 +36,18 @@ public class Repl {
 
     public void printPrompt() {
         System.out.print("\n" + EscapeSequences.SET_TEXT_COLOR_LIGHT_GREY + client.getPrompt() + EscapeSequences.SET_TEXT_COLOR_BLUE);
+    }
+
+
+    public void setClient(String newClient) {
+        if (Objects.equals(newClient, "Logged Out")) {
+            client = new LoggedOutClient();
+        }
+        else if (Objects.equals(newClient, "Logged In")) {
+            client = new LoggedInClient();
+        }
+        else if (Objects.equals(newClient, "In Game")) {
+            client = new InGameClient();
+        }
     }
 }
