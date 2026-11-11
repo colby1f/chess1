@@ -4,6 +4,8 @@ import chess.ChessGame;
 import server.ResponseException;
 import server.ServerFacade;
 
+import java.util.Arrays;
+
 public class LoggedInClient implements Client {
 
     private final Repl repl;
@@ -17,7 +19,29 @@ public class LoggedInClient implements Client {
 
     @Override
     public String eval(String input) {
-        return "";
+        try {
+            String[] tokens = input.toLowerCase().split(" ");
+
+            String command;
+            if (tokens.length > 0) {
+                command = tokens[0];
+            } else {
+                command = "help";
+            }
+
+            String[] params = Arrays.copyOfRange(tokens, 1, tokens.length);
+
+            return switch (command) {
+                case "list" -> listGames();
+                case "create" -> createGame(params);
+                case "join" -> joinGame(params);
+                case "watch" -> watchGame(params);
+                case "logout" -> logout();
+                default -> help();
+            };
+        } catch (Exception e) {
+            return e.getMessage();
+        }
     }
 
 
@@ -58,7 +82,6 @@ public class LoggedInClient implements Client {
         // SERVER CALL HERE
         return "Logged out";
     }
-
 
 
     public String help() {
