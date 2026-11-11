@@ -19,13 +19,21 @@ public class Repl {
         Scanner scanner = new Scanner(System.in);
         var result = "";
         while(!result.equals("quit")) {
+            printPrompt();
+            String line = scanner.nextLine();
 
+            try {
+                result = client.eval(line);
+                System.out.print(EscapeSequences.SET_TEXT_COLOR_MAGENTA + result);
+            } catch (Throwable e) {
+                System.out.print(e.toString());
+            }
         }
-
+        System.out.println();
     }
 
 
     public void printPrompt() {
-        System.out.println(EscapeSequences.SET_TEXT_COLOR_LIGHT_GREY + client.getPrompt());
+        System.out.print(EscapeSequences.SET_TEXT_COLOR_LIGHT_GREY + client.getPrompt());
     }
 }
