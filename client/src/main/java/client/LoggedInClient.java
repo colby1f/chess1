@@ -9,10 +9,12 @@ import java.util.Arrays;
 public class LoggedInClient implements Client {
 
     private final Repl repl;
+    private final String user;
     private final ServerFacade server;
 
-    public LoggedInClient(Repl repl, String serverUrl) {
+    public LoggedInClient(Repl repl, String user, String serverUrl) {
         this.repl = repl;
+        this.user = user;
         server = new ServerFacade(serverUrl);
     }
 

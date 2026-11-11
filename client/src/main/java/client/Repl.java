@@ -10,11 +10,13 @@ public class Repl {
     private final String url;
     private Client client;
     private String state;
+    private String user;
 
     public Repl(String serverUrl) {
         url = serverUrl;
         client = new LoggedOutClient(this, url);
         state = "Logged Out";
+        user = null;
     }
 
     public void run() {
@@ -48,9 +50,13 @@ public class Repl {
         if (Objects.equals(newClient, "Logged Out")) {
             client = new LoggedOutClient(this, url);
         } else if (Objects.equals(newClient, "Logged In")) {
-            client = new LoggedInClient(this, url);
+            client = new LoggedInClient(this, url, user);
         } else if (Objects.equals(newClient, "Game")) {
-            client = new InGameClient(this, url);
+            client = new InGameClient(this, url, user);
         }
+    }
+
+    public void setUser(String user) {
+        this.user = user;
     }
 }
