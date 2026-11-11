@@ -12,4 +12,9 @@ public class LoggedOutClient implements Client {
     public String getPrompt() {
         return prompt;
     }
+
+    @Override
+    public String eval(String input) {
+        return "";
+    }
 }
