@@ -8,9 +8,11 @@ import ui.EscapeSequences;
 public class Repl {
 
     private Client client;
+    private String state;
 
     public Repl(String serverUrl) {
         client = new LoggedOutClient();
+        state = "Logged Out";
     }
 
     public void run() {
@@ -19,7 +21,7 @@ public class Repl {
 
         Scanner scanner = new Scanner(System.in);
         var result = "";
-        while(!result.equals("quit")) {
+        while (!result.equals("quit")) {
             printPrompt();
             String line = scanner.nextLine();
 
@@ -35,19 +37,22 @@ public class Repl {
 
 
     public void printPrompt() {
-        System.out.print("\n" + EscapeSequences.SET_TEXT_COLOR_LIGHT_GREY + client.getPrompt() + EscapeSequences.SET_TEXT_COLOR_BLUE);
+        System.out.print("\n" + EscapeSequences.SET_TEXT_COLOR_LIGHT_GREY + state + ">>>" + EscapeSequences.SET_TEXT_COLOR_BLUE);
     }
 
 
     public void setClient(String newClient) {
+        state = newClient;
         if (Objects.equals(newClient, "Logged Out")) {
             client = new LoggedOutClient();
-        }
-        else if (Objects.equals(newClient, "Logged In")) {
+        } else if (Objects.equals(newClient, "Logged In")) {
             client = new LoggedInClient();
-        }
-        else if (Objects.equals(newClient, "In Game")) {
+        } else if (Objects.equals(newClient, "Game")) {
             client = new InGameClient();
         }
+    }
+
+    public String getState() {
+        return state;
     }
 }
