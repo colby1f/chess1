@@ -34,6 +34,6 @@ public class Repl {
 
 
     public void printPrompt() {
-        System.out.print(EscapeSequences.SET_TEXT_COLOR_LIGHT_GREY + client.getPrompt());
+        System.out.print("\n" + EscapeSequences.SET_TEXT_COLOR_LIGHT_GREY + client.getPrompt() + EscapeSequences.SET_TEXT_COLOR_BLUE);
     }
 }
