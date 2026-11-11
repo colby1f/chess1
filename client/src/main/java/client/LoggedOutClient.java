@@ -2,6 +2,7 @@ package client;
 
 import java.util.Arrays;
 import java.util.Locale;
+import java.util.Objects;
 
 public class LoggedOutClient implements Client {
 
@@ -29,12 +30,17 @@ public class LoggedOutClient implements Client {
 
 
     public String login(String... params) {
-        return "";
+        if ()
     }
 
 
-
+    @Override
     public String help() {
-
+        return """
+                - Login: "login" <username> <password>
+                - Register: "register" <username> <password> <email>
+                - Exit: "quit"
+                - List of Commands: "help"
+                """;
     }
 }
