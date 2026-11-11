@@ -3,6 +3,8 @@ package client;
 import server.ResponseException;
 import server.ServerFacade;
 
+import java.util.Arrays;
+
 public class InGameClient implements Client {
 
     private final Repl repl;
@@ -16,7 +18,30 @@ public class InGameClient implements Client {
 
     @Override
     public String eval(String input) {
-        return "";
+        try {
+            String[] tokens = input.toLowerCase().split(" ");
+
+            String command;
+            if (tokens.length > 0) {
+                command = tokens[0];
+            } else {
+                command = "help";
+            }
+
+            String[] params = Arrays.copyOfRange(tokens, 1, tokens.length);
+
+            return switch (command) {
+                case "highlight" -> highlight(params);
+                case "move" -> move(params);
+                case "redraw" -> redraw();
+                case "colors" -> changeBoardColors(params);
+                case "resign" -> resign();
+                case "leave" -> leaveGame();
+                default -> help();
+            };
+        } catch (Exception e) {
+            return e.getMessage();
+        }
     }
 
 
