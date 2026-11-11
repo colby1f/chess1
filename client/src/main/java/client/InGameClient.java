@@ -2,6 +2,13 @@ package client;
 
 public class InGameClient implements Client {
 
+    private final Repl repl;
+
+    public InGameClient(Repl repl) {
+        this.repl = repl;
+    }
+
+
     @Override
     public String eval(String input) {
         return "";

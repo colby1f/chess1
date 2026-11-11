@@ -2,6 +2,13 @@ package client;
 
 public class LoggedInClient implements Client {
 
+    private final Repl repl;
+
+    public LoggedInClient(Repl repl) {
+        this.repl = repl;
+    }
+
+
     @Override
     public String eval(String input) {
         return "";

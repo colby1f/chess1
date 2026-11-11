@@ -6,6 +6,12 @@ import java.util.Objects;
 
 public class LoggedOutClient implements Client {
 
+    private final Repl repl;
+
+    public LoggedOutClient(Repl repl) {
+        this.repl = repl;
+    }
+
     @Override
     public String eval(String input) {
         try {
@@ -30,7 +36,9 @@ public class LoggedOutClient implements Client {
 
 
     public String login(String... params) {
-        if ()
+        if (params.length == 2) {
+
+        }
     }
 
 
