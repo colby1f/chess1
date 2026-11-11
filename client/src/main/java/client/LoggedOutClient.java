@@ -5,17 +5,6 @@ import java.util.Locale;
 
 public class LoggedOutClient implements Client {
 
-    private final String prompt;
-
-    public LoggedOutClient() {
-        this.prompt = "Logged Out>>>";
-    }
-
-    @Override
-    public String getPrompt() {
-        return prompt;
-    }
-
     @Override
     public String eval(String input) {
         try {
@@ -36,5 +25,16 @@ public class LoggedOutClient implements Client {
         } catch (Exception e) {
             return e.getMessage();
         }
+    }
+
+
+    public String login(String... params) {
+        return "";
+    }
+
+
+
+    public String help() {
+
     }
 }
