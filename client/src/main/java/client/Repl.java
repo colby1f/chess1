@@ -40,26 +40,13 @@ public class Repl {
     }
 
 
-    public void setClient(String newClient) {
+    public void setState(String newClient) {
         state = newClient;
         if (Objects.equals(newClient, "Logged Out")) {
             client = new LoggedOutClient(this);
         } else if (Objects.equals(newClient, "Logged In")) {
             client = new LoggedInClient(this);
         } else if (Objects.equals(newClient, "Game")) {
-            client = new InGameClient(this);
-        }
-    }
-
-    public void setState(String state) {
-        this.state = state;
-        if (Objects.equals(state, "Logged Out")) {
-            client = new LoggedOutClient(this);
-        }
-        else if (Objects.equals(state, "Logged In")) {
-            client = new LoggedInClient(this);
-        }
-        else if (Objects.equals(state, "Game")) {
             client = new InGameClient(this);
         }
     }
