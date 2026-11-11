@@ -29,7 +29,10 @@ public class LoggedOutClient implements Client {
             String[] params = Arrays.copyOfRange(tokens, 1, tokens.length);
 
             return switch (command) {
-
+                case "login" -> login(params);
+                case "register" -> register(params);
+                case "quit" -> "quit";
+                default -> help();
             };
         } catch (Exception e) {
             return e.getMessage();
@@ -47,10 +50,16 @@ public class LoggedOutClient implements Client {
     }
 
 
-    public String register()
+    public String register(String... params) {
+        if (params.length == 3) {
+            repl.setState("Logged In");
+            // SERVER CALL HERE
+            return String.format("New user registered: %s", params[0]);
+        }
+        throw new ResponseException("Expected: <username> <password> <email>");
+    }
 
 
-    @Override
     public String help() {
         return """
                 - Login: "login" <username> <password>
