@@ -1,5 +1,7 @@
 package client;
 
+import chess.ChessGame;
+import server.ResponseException;
 import server.ServerFacade;
 
 public class LoggedInClient implements Client {
@@ -18,7 +20,47 @@ public class LoggedInClient implements Client {
         return "";
     }
 
-    @Override
+
+    public String listGames() {
+        // SERVER CALL HERE
+        return "";
+    }
+
+
+    public String createGame(String... params) {
+        if (params.length == 1) {
+            // SERVER CALL HERE
+            return String.format("Created game %s. Game ID: %d", params[0], 111); //EDIT THIS 111
+        }
+        throw new ResponseException("Expected: <game name>");
+    }
+
+
+    public String joinGame(String... params) {
+        if (params.length == 2) {
+            // SERVER CALL HERE
+            return String.format("Joined game %s as %s", params[0], params[1]);
+        }
+        throw new ResponseException("Expected: <game ID> <color>");
+    }
+
+
+    public String watchGame(String... params) {
+        if (params.length == 1) {
+            // SERVER CALL HERE
+            return String.format("Watching game %s", params[0]);
+        }
+        throw new ResponseException("Expected: <game ID>");
+    }
+
+
+    public String logout() {
+        // SERVER CALL HERE
+        return "Logged out";
+    }
+
+
+
     public String help() {
         return """
                 - List Games: "list"
