@@ -59,7 +59,7 @@ public class InGameClient implements Client {
     public String move(String... params) {
         if (params.length == 2) {
             // SERVER CALL HERE
-            return String.format("Moved %s%s", params[0], params[1]);
+            return String.format("%s did move %s%s", user, params[0], params[1]);
         }
         throw new ResponseException("Expected: <current position> <new position> <optional promotion>");
     }
@@ -82,13 +82,13 @@ public class InGameClient implements Client {
 
     public String resign() {
         // SERVER CALL HERE
-        return "Resigned";
+        return String.format("%s resigned", user);
     }
 
 
     public String leaveGame() {
         // SERVER CALL HERE
-        return "Left game";
+        return String.format("%s left the game", user);
     }
 
 

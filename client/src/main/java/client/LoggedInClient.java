@@ -65,7 +65,7 @@ public class LoggedInClient implements Client {
     public String joinGame(String... params) {
         if (params.length == 2) {
             // SERVER CALL HERE
-            return String.format("Joined game %s as %s", params[0], params[1]);
+            return String.format("%s joined game %s as %s", user, params[0], params[1]);
         }
         throw new ResponseException("Expected: <game ID> <color>");
     }
@@ -74,7 +74,7 @@ public class LoggedInClient implements Client {
     public String watchGame(String... params) {
         if (params.length == 1) {
             // SERVER CALL HERE
-            return String.format("Watching game %s", params[0]);
+            return String.format("%s is now watching game %s", user, params[0]);
         }
         throw new ResponseException("Expected: <game ID>");
     }
@@ -82,7 +82,7 @@ public class LoggedInClient implements Client {
 
     public String logout() {
         // SERVER CALL HERE
-        return "Logged out";
+        return String.format("%s logged out", user);
     }
 
 
