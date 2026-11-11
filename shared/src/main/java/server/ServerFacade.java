@@ -1,7 +1,9 @@
 package server;
 
 import com.google.gson.Gson;
-import jdk.jshell.spi.ExecutionControl;
+
+import model.*;
+import service.*;
 
 import java.net.*;
 import java.net.http.*;
@@ -16,6 +18,14 @@ public class ServerFacade {
 
     public ServerFacade(String url) {
         serverUrl = url;
+    }
+
+
+    public RegisterResult register(RegisterRequest registerRequest) {
+        var httpRequest = buildRequest("POST", "/user", registerRequest);
+        var response = sendRequest(httpRequest);
+
+
     }
 
 
