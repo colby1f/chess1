@@ -52,7 +52,16 @@ public class Repl {
         }
     }
 
-    public String getState() {
-        return state;
+    public void setState(String state) {
+        this.state = state;
+        if (Objects.equals(state, "Logged Out")) {
+            client = new LoggedOutClient();
+        }
+        else if (Objects.equals(state, "Logged In")) {
+            client = new LoggedInClient();
+        }
+        else if (Objects.equals(state, "Game")) {
+            client = new InGameClient();
+        }
     }
 }
