@@ -19,6 +19,7 @@ public class Repl {
 
     public void run() {
         System.out.println("\uD83D\uDC36 Welcome to Chess");
+        System.out.print(client.help());
 
         Scanner scanner = new Scanner(System.in);
         var result = "";
