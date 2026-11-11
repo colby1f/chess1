@@ -1,15 +1,17 @@
 package client;
 
 import java.util.Arrays;
-import java.util.Locale;
-import java.util.Objects;
+import server.ResponseException;
+import server.ServerFacade;
 
 public class LoggedOutClient implements Client {
 
     private final Repl repl;
+    private final ServerFacade server;
 
-    public LoggedOutClient(Repl repl) {
+    public LoggedOutClient(Repl repl, String serverUrl) {
         this.repl = repl;
+        server = new ServerFacade(serverUrl);
     }
 
     @Override
@@ -37,9 +39,14 @@ public class LoggedOutClient implements Client {
 
     public String login(String... params) {
         if (params.length == 2) {
-
+            repl.setState("Logged In");
+            return String.format("Logged in as %s", params[0]);
         }
+        throw new ResponseException("Expected: <username> <password>");
     }
+
+
+    public String register()
 
 
     @Override
