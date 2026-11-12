@@ -29,10 +29,6 @@ public class ServerFacade {
     }
 
 
-
-
-
-
     private HttpRequest buildRequest(String method, String path, Object body) {
         var request = HttpRequest.newBuilder()
                 .uri(URI.create(serverUrl + path))
@@ -52,15 +48,30 @@ public class ServerFacade {
     }
 
 
-
-    private HttpResponse<String> sendRequest(HttpRequest request) {
+    private HttpResponse<String> sendRequest(HttpRequest request) throws ResponseException {
         try {
             return client.send(request, BodyHandlers.ofString());
         } catch (Exception e) {
-            // FIX THIS!!!
-            throw new RuntimeException();
-            // FIX THIS!!!
+            throw new ResponseException(500, e.getMessage());
         }
+    }
+
+    private <T> T handleResponse(HttpResponse<String> response, Class<T> responseClass) throws ResponseException {
+        var status = response.statusCode();
+        if (status / 100 != 2) {
+            var body = response.body();
+            if (body != null) {
+                throw ResponseException.fromJson(body);
+            }
+
+            throw new ResponseException(status, "Error: " + status);
+        }
+
+        if (responseClass != null) {
+            return new Gson().fromJson(response.body(), responseClass);
+        }
+
+        return null;
     }
 
 }
