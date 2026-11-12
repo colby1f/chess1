@@ -21,11 +21,19 @@ public class ServerFacade {
     }
 
 
+    public LoginResult login(LoginRequest loginRequest) throws ResponseException {
+        var httpRequest = buildRequest("POST", "/session", loginRequest, null);
+        var response = sendRequest(httpRequest);
+        return handleResponse(response, LoginResult.class);
+    }
+
+
     public RegisterResult register(RegisterRequest registerRequest) throws ResponseException {
         var httpRequest = buildRequest("POST", "/user", registerRequest, null);
         var response = sendRequest(httpRequest);
         return handleResponse(response, RegisterResult.class);
     }
+
 
 
     private HttpRequest buildRequest(String method, String path, Object body, String header) {
