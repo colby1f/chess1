@@ -53,30 +53,30 @@ public class LoggedInClient implements Client {
     }
 
 
-    public String createGame(String... params) {
+    public String createGame(String... params) throws ResponseException {
         if (params.length == 1) {
             // SERVER CALL HERE
             return String.format("Created game %s. Game ID: %d", params[0], 111); //EDIT THIS 111
         }
-        throw new ResponseException("Expected: <game name>");
+        throw new ResponseException("400", "Expected: <game name>");
     }
 
 
-    public String joinGame(String... params) {
+    public String joinGame(String... params) throws ResponseException {
         if (params.length == 2) {
             // SERVER CALL HERE
             return String.format("%s joined game %s as %s", user, params[0], params[1]);
         }
-        throw new ResponseException("Expected: <game ID> <color>");
+        throw new ResponseException("400", "Expected: <game ID> <color>");
     }
 
 
-    public String watchGame(String... params) {
+    public String watchGame(String... params) throws ResponseException {
         if (params.length == 1) {
             // SERVER CALL HERE
             return String.format("%s is now watching game %s", user, params[0]);
         }
-        throw new ResponseException("Expected: <game ID>");
+        throw new ResponseException("400", "Expected: <game ID>");
     }
 
 

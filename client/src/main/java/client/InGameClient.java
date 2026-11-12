@@ -47,21 +47,21 @@ public class InGameClient implements Client {
     }
 
 
-    public String highlight(String... params) {
+    public String highlight(String... params) throws ResponseException {
         if (params.length == 1) {
             // SERVER CALL HERE
             return String.format("Available moves for position %s", params[0]);
         }
-        throw new ResponseException("Expected: <position>");
+        throw new ResponseException("400", "Expected: <position>");
     }
 
 
-    public String move(String... params) {
+    public String move(String... params) throws ResponseException {
         if (params.length == 2) {
             // SERVER CALL HERE
             return String.format("%s did move %s%s", user, params[0], params[1]);
         }
-        throw new ResponseException("Expected: <current position> <new position> <optional promotion>");
+        throw new ResponseException("400", "Expected: <current position> <new position> <optional promotion>");
     }
 
 
@@ -71,12 +71,12 @@ public class InGameClient implements Client {
     }
 
 
-    public String changeBoardColors(String... params) {
+    public String changeBoardColors(String... params) throws ResponseException {
         if (params.length == 1) {
             // SERVER CALL HERE
             return String.format("Board color changed to %s", params[0]);
         }
-        throw new ResponseException("Expected: <color number>");
+        throw new ResponseException("400", "Expected: <color number>");
     }
 
 
