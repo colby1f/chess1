@@ -3,6 +3,8 @@ package client;
 import java.util.Arrays;
 import server.ResponseException;
 import server.ServerFacade;
+import service.*;
+
 
 public class LoggedOutClient implements Client {
 
@@ -40,25 +42,25 @@ public class LoggedOutClient implements Client {
     }
 
 
-    public String login(String... params) {
+    public String login(String... params) throws ResponseException {
         if (params.length == 2) {
             repl.setUser(params[0]);
             repl.setState("Logged In");
-            // SERVER CALL HERE
+
             return String.format("Logged in as %s", params[0]);
         }
-        throw new ResponseException("Expected: <username> <password>");
+        throw new ResponseException("400", "Expected: <username> <password>");
     }
 
 
-    public String register(String... params) {
+    public String register(String... params) throws ResponseException {
         if (params.length == 3) {
             repl.setUser(params[0]);
             repl.setState("Logged In");
-            // SERVER CALL HERE
+            server.register(new RegisterRequest(params[0], params[1], params[2]));
             return String.format("New user registered: %s", params[0]);
         }
-        throw new ResponseException("Expected: <username> <password> <email>");
+        throw new ResponseException("400", "Expected: <username> <password> <email>");
     }
 
 
