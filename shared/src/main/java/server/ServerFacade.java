@@ -22,17 +22,20 @@ public class ServerFacade {
 
 
     public RegisterResult register(RegisterRequest registerRequest) throws ResponseException {
-        var httpRequest = buildRequest("POST", "/user", registerRequest);
+        var httpRequest = buildRequest("POST", "/user", registerRequest, null);
         var response = sendRequest(httpRequest);
         return handleResponse(response, RegisterResult.class);
     }
 
 
-    private HttpRequest buildRequest(String method, String path, Object body) {
+    private HttpRequest buildRequest(String method, String path, Object body, String header) {
         var request = HttpRequest.newBuilder()
                 .uri(URI.create(serverUrl + path))
                 .method(method, makeRequestBody(body));
 
+        if (header != null) {
+            request.setHeader("authentication", header);
+        }
 
         return request.build();
     }
