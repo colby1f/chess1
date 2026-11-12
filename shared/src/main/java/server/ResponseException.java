@@ -6,14 +6,14 @@ import java.util.HashMap;
 
 public class ResponseException extends Exception {
 
-    final private String code;
+    final private int code;
 
-    public ResponseException(String code, String message) {
+    public ResponseException(int code, String message) {
         super(message);
         this.code = code;
     }
 
-    public String getCode() {
+    public int getCode() {
         return code;
     }
 
@@ -21,7 +21,8 @@ public class ResponseException extends Exception {
     public static ResponseException fromJson(String json) {
         var map = new Gson().fromJson(json, HashMap.class);
         String status = map.get("status").toString();
+        int statusInt = Integer.parseInt(status);
         String message = map.get("message").toString();
-        return new ResponseException(status, message);
+        return new ResponseException(statusInt, message);
     }
 }

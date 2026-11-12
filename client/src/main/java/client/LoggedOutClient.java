@@ -49,7 +49,7 @@ public class LoggedOutClient implements Client {
 
             return String.format("Logged in as %s", params[0]);
         }
-        throw new ResponseException("400", "Expected: <username> <password>");
+        throw new ResponseException(400, "Expected: <username> <password>");
     }
 
 
@@ -60,7 +60,7 @@ public class LoggedOutClient implements Client {
             server.register(new RegisterRequest(params[0], params[1], params[2]));
             return String.format("New user registered: %s", params[0]);
         }
-        throw new ResponseException("400", "Expected: <username> <password> <email>");
+        throw new ResponseException(400, "Expected: <username> <password> <email>");
     }
 
 
