@@ -35,6 +35,13 @@ public class ServerFacade {
     }
 
 
+    public ListGamesResult listGames(String authToken) throws ResponseException {
+        var httpRequest = buildRequest("GET", "/game", null, authToken);
+        var response = sendRequest(httpRequest);
+        return handleResponse(response, ListGamesResult.class);
+    }
+
+
 
     private HttpRequest buildRequest(String method, String path, Object body, String header) {
         var request = HttpRequest.newBuilder()
