@@ -11,12 +11,14 @@ public class Repl {
     private Client client;
     private String state;
     private String user;
+    private String authToken;
 
     public Repl(String serverUrl) {
         url = serverUrl;
         client = new LoggedOutClient(this, url);
         state = "Logged Out";
         user = null;
+        authToken = null;
     }
 
     public void run() {
@@ -58,5 +60,9 @@ public class Repl {
 
     public void setUser(String user) {
         this.user = user;
+    }
+
+    public void setAuthToken(String authToken) {
+        this.authToken = authToken;
     }
 }
