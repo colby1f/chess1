@@ -57,8 +57,8 @@ public class LoggedOutClient implements Client {
         if (params.length == 3) {
             repl.setUser(params[0]);
             repl.setState("Logged In");
-            server.register(new RegisterRequest(params[0], params[1], params[2]));
-            return String.format("New user registered: %s", params[0]);
+            RegisterResult registerResult = server.register(new RegisterRequest(params[0], params[1], params[2]));
+            return String.format("New user registered: %s", registerResult.username());
         }
         throw new ResponseException(400, "Expected: <username> <password> <email>");
     }

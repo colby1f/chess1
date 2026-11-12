@@ -21,11 +21,10 @@ public class ServerFacade {
     }
 
 
-    public RegisterResult register(RegisterRequest registerRequest) {
+    public RegisterResult register(RegisterRequest registerRequest) throws ResponseException {
         var httpRequest = buildRequest("POST", "/user", registerRequest);
         var response = sendRequest(httpRequest);
-
-
+        return handleResponse(response, RegisterResult.class);
     }
 
 
