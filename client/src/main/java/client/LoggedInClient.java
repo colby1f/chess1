@@ -1,14 +1,17 @@
 package client;
 
+import chess.ChessGame;
 import com.google.gson.Gson;
 import model.*;
 import server.ResponseException;
 import server.ServerFacade;
 import service.CreateGameRequest;
 import service.CreateGameResult;
+import service.JoinGameRequest;
 import service.ListGamesResult;
 
 import java.util.Arrays;
+import java.util.Locale;
 
 public class LoggedInClient implements Client {
 
@@ -80,7 +83,24 @@ public class LoggedInClient implements Client {
 
     public String joinGame(String... params) throws ResponseException {
         if (params.length == 2) {
-            // SERVER CALL HERE
+
+            ChessGame.TeamColor color;
+            if (params[1].equalsIgnoreCase("white")) {
+                color = ChessGame.TeamColor.WHITE;
+            } else if (params[1].equalsIgnoreCase("black")) {
+                color = ChessGame.TeamColor.BLACK;
+            } else {
+                throw new ResponseException(400, "Color must be black or white");
+            }
+
+            int gameID;
+            try {
+                gameID = Integer.parseInt(params[0]);
+            } catch (Exception e) {
+                throw new ResponseException(400, "Game ID must be a number");
+            }
+
+            server.joinGame(new JoinGameRequest(color, gameID), repl.getAuthToken());
             return String.format("%s joined game %s as %s", user, params[0], params[1]);
         }
         throw new ResponseException(400, "Expected: <game ID> <color>");
