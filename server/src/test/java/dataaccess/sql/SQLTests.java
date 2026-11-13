@@ -6,6 +6,7 @@ import dataaccess.DataAccess;
 import dataaccess.DataAccessException;
 import dataaccess.UnauthorizedException;
 import model.AuthData;
+import model.GameData;
 import model.UserData;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
@@ -95,6 +96,16 @@ public class SQLTests {
 
         assertEquals("Institute", game.gameName());
 
+    }
+
+    @Test
+    void getGame() throws DataAccessException {
+
+        GameData gameData = dataAccess.addGame("Institute");
+
+        var game = dataAccess.getGame(gameData.gameID());
+
+        assertEquals("Institute", game.gameName());
     }
 
 

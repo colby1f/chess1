@@ -143,7 +143,7 @@ public class Server {
         var joinGameRequest = gsonObject.fromJson(ctx.body(), JoinGameRequest.class);
         try {
             gameService.joinGame(joinGameRequest, authToken);
-            ctx.status(200);
+            ctx.status(200).contentType("application.json");
         } catch (DataAccessException e) {
             ctx.status(400).contentType("application/json").result(gsonObject.toJson(Map.of("message", "Error: bad request")));
         } catch (UnauthorizedException e) {
