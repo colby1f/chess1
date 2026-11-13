@@ -5,6 +5,7 @@ import dataaccess.*;
 import dataaccess.sql.MySqlDataAccess;
 import io.javalin.*;
 import io.javalin.http.Context;
+import model.GameData;
 import service.*;
 
 import java.util.Map;
@@ -142,8 +143,8 @@ public class Server {
         var authToken = ctx.header("authorization");
         var joinGameRequest = gsonObject.fromJson(ctx.body(), JoinGameRequest.class);
         try {
-            gameService.joinGame(joinGameRequest, authToken);
-            ctx.status(200).contentType("application.json");
+            GameData gameData = gameService.joinGame(joinGameRequest, authToken);
+            ctx.status(200).contentType("application.json").result(gsonObject.toJson(gameData));
         } catch (DataAccessException e) {
             ctx.status(400).contentType("application/json").result(gsonObject.toJson(Map.of("message", "Error: bad request")));
         } catch (UnauthorizedException e) {
