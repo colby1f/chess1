@@ -2,15 +2,15 @@ package client;
 
 import chess.ChessGame;
 
-public class ChessBoardPrinter {
+public class ChessBoardCreator {
 
     ChessGame chessGame;
 
-    public ChessBoardPrinter(ChessGame chessGame) {
+    public ChessBoardCreator(ChessGame chessGame) {
         this.chessGame = chessGame;
     }
 
-    public String PrintBoard() {
+    public String CreateBoard() {
         return null;
     }
 
