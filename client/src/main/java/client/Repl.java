@@ -33,7 +33,8 @@ public class Repl {
 
             try {
                 result = client.eval(line);
-                System.out.print(EscapeSequences.SET_TEXT_COLOR_MAGENTA + result);
+                System.out.print(EscapeSequences.SET_TEXT_COLOR_MAGENTA);
+                System.out.print(result);
             } catch (Throwable e) {
                 System.out.print(e.getMessage());
             }
