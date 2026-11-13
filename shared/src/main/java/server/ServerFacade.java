@@ -49,6 +49,12 @@ public class ServerFacade {
     }
 
 
+    public void joinGame(JoinGameRequest joinGameRequest, String authToken) throws ResponseException {
+        var httpRequest = buildRequest("POST", "/game", joinGameRequest, authToken);
+        sendRequest(httpRequest);
+    }
+
+
     private HttpRequest buildRequest(String method, String path, Object body, String header) {
         var request = HttpRequest.newBuilder()
                 .uri(URI.create(serverUrl + path))
