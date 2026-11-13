@@ -40,7 +40,7 @@ public class Server {
         javalin.delete("/session", this::logoutHandler);
         javalin.get("/game", this::listGamesHandler);
         javalin.post("/game", this::createGameHandler);
-        javalin.put("game", this::joinGameHandler);
+        javalin.put("/game", this::joinGameHandler);
 
     }
 
