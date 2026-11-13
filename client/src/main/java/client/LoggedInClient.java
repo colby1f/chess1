@@ -1,7 +1,6 @@
 package client;
 
 import chess.ChessGame;
-import com.google.gson.Gson;
 import model.*;
 import server.ResponseException;
 import server.ServerFacade;
@@ -11,7 +10,6 @@ import service.JoinGameRequest;
 import service.ListGamesResult;
 
 import java.util.Arrays;
-import java.util.Locale;
 
 public class LoggedInClient implements Client {
 
@@ -116,8 +114,11 @@ public class LoggedInClient implements Client {
     }
 
 
-    public String logout() {
-        // SERVER CALL HERE
+    public String logout() throws ResponseException {
+        server.logout(repl.getAuthToken());
+        repl.setState("logout");
+        repl.setUser(null);
+        repl.setAuthToken(null);
         return String.format("%s logged out", user);
     }
 
