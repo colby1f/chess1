@@ -20,6 +20,8 @@ public interface DataAccess {
 
     ArrayList<GameData> getGames() throws DataAccessException;
 
+    GameData getGame(int gameID) throws DataAccessException;
+
     GameData addGame(String gameName) throws DataAccessException;
 
     void addPlayer(String authToken, ChessGame.TeamColor playerColor, Integer gameID) throws AlreadyTakenException, DataAccessException;
