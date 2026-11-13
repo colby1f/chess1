@@ -4,6 +4,8 @@ import com.google.gson.Gson;
 import model.*;
 import server.ResponseException;
 import server.ServerFacade;
+import service.CreateGameRequest;
+import service.CreateGameResult;
 import service.ListGamesResult;
 
 import java.util.Arrays;
@@ -69,8 +71,8 @@ public class LoggedInClient implements Client {
 
     public String createGame(String... params) throws ResponseException {
         if (params.length == 1) {
-            // SERVER CALL HERE
-            return String.format("Created game %s. Game ID: %d", params[0], 111); //EDIT THIS 111
+            CreateGameResult createGameResult = server.createGame(new CreateGameRequest(params[0]), repl.getAuthToken());
+            return String.format("Created game %s. Game ID: %d", params[0], createGameResult.gameID());
         }
         throw new ResponseException(400, "Expected: <game name>");
     }
