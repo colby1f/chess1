@@ -37,7 +37,7 @@ public class GameService {
         return new CreateGameResult(gameData.gameID());
     }
 
-    public void joinGame(JoinGameRequest joinGameRequest, String authToken) throws DataAccessException, AlreadyTakenException {
+    public GameData joinGame(JoinGameRequest joinGameRequest, String authToken) throws DataAccessException, AlreadyTakenException {
 
         dataAccess.authenticate(authToken);
 
@@ -49,5 +49,7 @@ public class GameService {
         }
 
         dataAccess.addPlayer(authToken, playerColor, gameID);
+
+        return dataAccess.getGame(gameID);
     }
 }
