@@ -98,7 +98,9 @@ public class LoggedInClient implements Client {
                 throw new ResponseException(400, "Game ID must be a number");
             }
 
-            server.joinGame(new JoinGameRequest(color, gameID), repl.getAuthToken());
+            GameData gameData = server.joinGame(new JoinGameRequest(color, gameID), repl.getAuthToken());
+            ChessBoardPrinter chessBoardPrinter = new ChessBoardPrinter(gameData.game(), color);
+            chessBoardPrinter.printChessBoard();
             return String.format("%s joined game %s as %s", user, gameID, color);
         }
         throw new ResponseException(400, "Expected: <game ID> <color>");
