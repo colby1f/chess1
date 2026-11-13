@@ -99,7 +99,7 @@ public class LoggedInClient implements Client {
             }
 
             server.joinGame(new JoinGameRequest(color, gameID), repl.getAuthToken());
-            return String.format("%s joined game %s as %s", user, params[0], params[1]);
+            return String.format("%s joined game %s as %s", user, gameID, color);
         }
         throw new ResponseException(400, "Expected: <game ID> <color>");
     }
