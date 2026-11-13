@@ -1,8 +1,10 @@
 package client;
 
-import chess.ChessGame;
+import com.google.gson.Gson;
+import model.*;
 import server.ResponseException;
 import server.ServerFacade;
+import service.ListGamesResult;
 
 import java.util.Arrays;
 
@@ -47,9 +49,21 @@ public class LoggedInClient implements Client {
     }
 
 
-    public String listGames() {
-        // SERVER CALL HERE
-        return "";
+    public String listGames() throws ResponseException {
+        ListGamesResult listGamesResult = server.listGames(repl.getAuthToken());
+        StringBuilder gameList = new StringBuilder();
+        for (GameData game : listGamesResult.games()) {
+            gameList.append(game.gameID())
+                    .append(". Game name: ")
+                    .append(game.gameName())
+                    .append("   White: ")
+                    .append(game.whiteUsername())
+                    .append("   Black: ")
+                    .append(game.blackUsername())
+                    .append("\n");
+        }
+
+        return gameList.toString();
     }
 
 
