@@ -78,7 +78,7 @@ public class LoggedOutClient implements Client {
         return """
                 - Login: "login" <username> <password>
                 - Register: "register" <username> <password> <email>
-                - Clear: "clear"
+                - Clear All Data: "clear"
                 - Exit: "quit"
                 - List of Commands: "help"
                 """;
