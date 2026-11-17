@@ -86,7 +86,7 @@ public class ServerFacade {
                 .method(method, makeRequestBody(body));
 
         if (header != null) {
-            request.setHeader("authentication", header);
+            request.setHeader("authorization", header);
         }
 
         return request.build();
