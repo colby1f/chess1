@@ -34,6 +34,7 @@ public class LoggedOutClient implements Client {
             return switch (command) {
                 case "login" -> login(params);
                 case "register" -> register(params);
+                case "clear" -> clear();
                 case "quit" -> "quit";
                 default -> help();
             };
@@ -67,10 +68,17 @@ public class LoggedOutClient implements Client {
     }
 
 
+    public String clear() throws ResponseException {
+        server.clear();
+        return "Data Cleared";
+    }
+
+
     public String help() {
         return """
                 - Login: "login" <username> <password>
                 - Register: "register" <username> <password> <email>
+                - Clear: "clear"
                 - Exit: "quit"
                 - List of Commands: "help"
                 """;

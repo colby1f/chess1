@@ -35,6 +35,12 @@ public class ServerFacade {
     }
 
 
+    public void clear() throws ResponseException {
+        var httpRequest = buildRequest("DELETE", "/db", null, null);
+        sendRequest(httpRequest);
+    }
+
+
     public ListGamesResult listGames(String authToken) throws ResponseException {
         var httpRequest = buildRequest("GET", "/game", null, authToken);
         var response = sendRequest(httpRequest);
