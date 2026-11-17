@@ -101,6 +101,8 @@ public class LoggedInClient implements Client {
             GameData gameData = server.joinGame(new JoinGameRequest(color, gameID), repl.getAuthToken());
             ChessBoardPrinter chessBoardPrinter = new ChessBoardPrinter(gameData.game(), color);
             chessBoardPrinter.printChessBoard();
+            repl.setGame(gameData);
+            repl.setState("Game");
             return String.format("%s joined game %s as %s", user, gameID, color);
         }
         throw new ResponseException(400, "Expected: <game ID> <color>");
