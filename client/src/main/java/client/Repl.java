@@ -3,6 +3,7 @@ package client;
 import java.util.Objects;
 import java.util.Scanner;
 
+import chess.ChessGame;
 import model.GameData;
 import ui.EscapeSequences;
 
@@ -14,6 +15,7 @@ public class Repl {
     private String user;
     private String authToken;
     private GameData game;
+    private ChessGame.TeamColor color;
 
     public Repl(String serverUrl) {
         url = serverUrl;
@@ -22,6 +24,7 @@ public class Repl {
         user = null;
         authToken = null;
         game = null;
+        color = null;
     }
 
     public void run() {
@@ -80,5 +83,13 @@ public class Repl {
 
     public GameData getGame() {
         return game;
+    }
+
+    public void setColor(ChessGame.TeamColor color) {
+        this.color = color;
+    }
+
+    public ChessGame.TeamColor getColor() {
+        return color;
     }
 }
