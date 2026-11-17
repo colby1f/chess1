@@ -50,7 +50,7 @@ public class Repl {
 
 
     public void printPrompt() {
-        System.out.print("\n" + EscapeSequences.SET_TEXT_COLOR_LIGHT_GREY + state + ">>>" + EscapeSequences.SET_TEXT_COLOR_BLUE);
+        System.out.print("\n" + EscapeSequences.SET_TEXT_COLOR_LIGHT_GREY + state + ">>> " + EscapeSequences.SET_TEXT_COLOR_BLUE);
     }
 
 
