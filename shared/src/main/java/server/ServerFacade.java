@@ -55,6 +55,12 @@ public class ServerFacade {
         return handleResponse(response, GameData.class);
     }
 
+    public GameData watchGame(int gameID, String authToken) throws ResponseException {
+        var httpRequest = buildRequest("GET", "/game", null, authToken);
+        var response = sendRequest(httpRequest);
+        return handleResponse(response, GameData.class);
+    }
+
 
     public void logout(String authToken) throws ResponseException {
         var httpRequest = buildRequest("DELETE", "/session", null, authToken);

@@ -109,8 +109,18 @@ public class LoggedInClient implements Client {
 
     public String watchGame(String... params) throws ResponseException {
         if (params.length == 1) {
-            // SERVER CALL HERE
-            return String.format("%s is now watching game %s", user, params[0]);
+
+            int gameID;
+            try {
+                gameID = Integer.parseInt(params[0]);
+            } catch (Exception e) {
+                throw new ResponseException(400, "Game ID must be a number");
+            }
+
+            GameData gameData = server.watchGame(gameID, repl.getAuthToken());
+            ChessBoardPrinter chessBoardPrinter = new ChessBoardPrinter(gameData.game(), ChessGame.TeamColor.WHITE);
+            chessBoardPrinter.printChessBoard();
+            return String.format("%s is now watching game %s", user, gameData.gameName());
         }
         throw new ResponseException(400, "Expected: <game ID>");
     }
