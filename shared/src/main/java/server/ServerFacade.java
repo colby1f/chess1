@@ -115,7 +115,7 @@ public class ServerFacade {
         if (status / 100 != 2) {
             var body = response.body();
             if (body != null) {
-                throw ResponseException.fromJson(body);
+                throw ResponseException.fromJson(body, status);
             }
 
             throw new ResponseException(status, "Error: " + status);
