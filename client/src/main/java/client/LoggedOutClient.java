@@ -34,7 +34,7 @@ public class LoggedOutClient implements Client {
             return switch (command) {
                 case "login" -> login(params);
                 case "register" -> register(params);
-                case "clear" -> clear();
+                case "admin_clear" -> clear();
                 case "quit" -> "quit";
                 default -> help();
             };
@@ -78,7 +78,6 @@ public class LoggedOutClient implements Client {
         return """
                 - Login: "login" <username> <password>
                 - Register: "register" <username> <password> <email>
-                - Clear All Data: "clear"
                 - Exit: "quit"
                 - List of Commands: "help"
                 """;
