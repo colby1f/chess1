@@ -59,9 +59,9 @@ public class Repl {
         if (Objects.equals(newClient, "Logged Out")) {
             client = new LoggedOutClient(this, url);
         } else if (Objects.equals(newClient, "Logged In")) {
-            client = new LoggedInClient(this, url, user);
+            client = new LoggedInClient(this, user, url);
         } else if (Objects.equals(newClient, "Game")) {
-            client = new InGameClient(this, url, user);
+            client = new InGameClient(this, user, url);
         }
     }
 
