@@ -68,6 +68,12 @@ public class ServerFacade {
     }
 
 
+    public void leaveGame(String authToken) throws ResponseException {
+        var httpRequest = buildRequest("PUT", "/game", null, authToken);
+        sendRequest(httpRequest);
+    }
+
+
     private HttpRequest buildRequest(String method, String path, Object body, String header) {
         var request = HttpRequest.newBuilder()
                 .uri(URI.create(serverUrl + path))

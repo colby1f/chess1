@@ -1,5 +1,6 @@
 package client;
 
+import chess.ChessGame;
 import server.ResponseException;
 import server.ServerFacade;
 
@@ -36,7 +37,6 @@ public class InGameClient implements Client {
                 case "highlight" -> highlight(params);
                 case "move" -> move(params);
                 case "redraw" -> redraw();
-                case "colors" -> changeBoardColors(params);
                 case "resign" -> resign();
                 case "leave" -> leaveGame();
                 default -> help();
@@ -66,19 +66,10 @@ public class InGameClient implements Client {
 
 
     public String redraw() {
-        // SERVER CALL HERE
+        ChessBoardPrinter chessBoardPrinter = new ChessBoardPrinter(repl.getGame().game(), repl.getColor());
+        chessBoardPrinter.printChessBoard();
         return "Current Board";
     }
-
-
-    public String changeBoardColors(String... params) throws ResponseException {
-        if (params.length == 1) {
-            // SERVER CALL HERE
-            return String.format("Board color changed to %s", params[0]);
-        }
-        throw new ResponseException(400, "Expected: <color number>");
-    }
-
 
     public String resign() {
         // SERVER CALL HERE
@@ -86,8 +77,11 @@ public class InGameClient implements Client {
     }
 
 
-    public String leaveGame() {
-        // SERVER CALL HERE
+    public String leaveGame() throws ResponseException {
+        server.leaveGame(repl.getAuthToken());
+        repl.setState("Logged In");
+        repl.setColor(null);
+        repl.setGame(null);
         return String.format("%s left the game", user);
     }
 
@@ -97,7 +91,6 @@ public class InGameClient implements Client {
                 - Highlight Available Moves: "highlight" <position> (ex. a1)
                 - Make a Move: "move" <current position> <new position> <optional promotion> (ex b3 a3 q)
                 - Redraw Chess Board: "redraw"
-                - Change Board Colors: "colors" <color number>
                 - Resign: "resign"
                 - Leave Game: "leave"
                 """;
