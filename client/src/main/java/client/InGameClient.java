@@ -1,6 +1,5 @@
 package client;
 
-import chess.ChessGame;
 import server.ResponseException;
 import server.ServerFacade;
 

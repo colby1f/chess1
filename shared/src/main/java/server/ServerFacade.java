@@ -55,7 +55,7 @@ public class ServerFacade {
         return handleResponse(response, GameData.class);
     }
 
-    public ListGamesResult watchGame(int gameID, String authToken) throws ResponseException {
+    public ListGamesResult watchGame(String authToken) throws ResponseException {
         var httpRequest = buildRequest("GET", "/game", null, authToken);
         var response = sendRequest(httpRequest);
         return handleResponse(response, ListGamesResult.class);

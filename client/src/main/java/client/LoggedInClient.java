@@ -120,7 +120,7 @@ public class LoggedInClient implements Client {
                 throw new ResponseException(400, "Game ID must be a number");
             }
 
-            ListGamesResult listGamesResult = server.watchGame(gameID, repl.getAuthToken());
+            ListGamesResult listGamesResult = server.watchGame(repl.getAuthToken());
             if (listGamesResult == null) {
                 throw new ResponseException(400, "Game does not exist");
             }
