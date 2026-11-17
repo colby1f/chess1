@@ -46,6 +46,8 @@ public class LoggedInClient implements Client {
                 case "logout" -> logout();
                 default -> help();
             };
+        } catch (ResponseException e) {
+            return e.getCode() + " " + e.getMessage();
         } catch (Exception e) {
             return e.getMessage();
         }
@@ -146,7 +148,7 @@ public class LoggedInClient implements Client {
 
     public String logout() throws ResponseException {
         server.logout(repl.getAuthToken());
-        repl.setState("logout");
+        repl.setState("Logged Out");
         repl.setUser(null);
         repl.setAuthToken(null);
         return String.format("%s logged out", user);

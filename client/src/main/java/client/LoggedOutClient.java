@@ -38,6 +38,8 @@ public class LoggedOutClient implements Client {
                 case "quit" -> "quit";
                 default -> help();
             };
+        } catch (ResponseException e) {
+            return e.getCode() + " " + e.getMessage();
         } catch (Exception e) {
             return e.getMessage();
         }
