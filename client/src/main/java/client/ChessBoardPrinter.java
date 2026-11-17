@@ -5,6 +5,7 @@ import ui.EscapeSequences;
 
 import java.io.PrintStream;
 import java.nio.charset.StandardCharsets;
+import java.util.Objects;
 
 public class ChessBoardPrinter {
 
@@ -26,17 +27,22 @@ public class ChessBoardPrinter {
         for (int row = 1; row <= 8; row++) {
             for (int col = 1; col <= 8; col++) {
                 ChessPiece chessPiece = board.getPiece(new ChessPosition(row, col));
+                String pieceString = null;
                 if (chessPiece != null) {
-                    String pieceString = getPieceString(chessPiece);
+                    pieceString = getPieceString(chessPiece);
                 }
 
                 if ((row + col) % 2 != 0) {
-                    setWhite(out);
+                    out.print(EscapeSequences.SET_BG_COLOR_WHITE);
+                    out.print(EscapeSequences.SET_TEXT_COLOR_WHITE);
+                    out.print(Objects.requireNonNullElse(pieceString, EscapeSequences.EMPTY));
                 } else {
-                    setBlack(out);
+                    out.print(EscapeSequences.SET_BG_COLOR_LIGHT_GREY);
+                    out.print(EscapeSequences.SET_TEXT_COLOR_LIGHT_GREY);
+                    out.print(Objects.requireNonNullElse(pieceString, EscapeSequences.EMPTY));
                 }
-
             }
+            out.println();
         }
     }
 
@@ -62,15 +68,6 @@ public class ChessBoardPrinter {
             case KNIGHT -> EscapeSequences.BLACK_KNIGHT;
             case PAWN -> EscapeSequences.BLACK_PAWN;
         };
-
-    }
-
-
-    private void setWhite(PrintStream out) {
-
-    }
-
-    private void setBlack(PrintStream out) {
 
     }
 
