@@ -117,10 +117,25 @@ public class LoggedInClient implements Client {
                 throw new ResponseException(400, "Game ID must be a number");
             }
 
-            GameData gameData = server.watchGame(gameID, repl.getAuthToken());
-            ChessBoardPrinter chessBoardPrinter = new ChessBoardPrinter(gameData.game(), ChessGame.TeamColor.WHITE);
+            ListGamesResult listGamesResult = server.watchGame(gameID, repl.getAuthToken());
+            if (listGamesResult == null) {
+                throw new ResponseException(400, "Game does not exist");
+            }
+
+            GameData correct_game = null;
+            for (GameData game : listGamesResult.games()) {
+                if (game.gameID() == gameID) {
+                    correct_game = game;
+                }
+            }
+
+            if (correct_game == null) {
+                throw new ResponseException(400, "Game Does not exist");
+            }
+
+            ChessBoardPrinter chessBoardPrinter = new ChessBoardPrinter(correct_game.game(), ChessGame.TeamColor.WHITE);
             chessBoardPrinter.printChessBoard();
-            return String.format("%s is now watching game %s", user, gameData.gameName());
+            return String.format("%s is now watching game %s", user, correct_game.gameName());
         }
         throw new ResponseException(400, "Expected: <game ID>");
     }
