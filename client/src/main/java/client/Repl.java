@@ -3,6 +3,7 @@ package client;
 import java.util.Objects;
 import java.util.Scanner;
 
+import model.GameData;
 import ui.EscapeSequences;
 
 public class Repl {
@@ -12,6 +13,7 @@ public class Repl {
     private String state;
     private String user;
     private String authToken;
+    private GameData game;
 
     public Repl(String serverUrl) {
         url = serverUrl;
@@ -19,6 +21,7 @@ public class Repl {
         state = "Logged Out";
         user = null;
         authToken = null;
+        game = null;
     }
 
     public void run() {
@@ -69,5 +72,13 @@ public class Repl {
 
     public String getAuthToken() {
         return authToken;
+    }
+
+    public void setGame(GameData game) {
+        this.game = game;
+    }
+
+    public GameData getGame() {
+        return game;
     }
 }
