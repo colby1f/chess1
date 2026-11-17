@@ -102,6 +102,7 @@ public class LoggedInClient implements Client {
             ChessBoardPrinter chessBoardPrinter = new ChessBoardPrinter(gameData.game(), color);
             chessBoardPrinter.printChessBoard();
             repl.setGame(gameData);
+            repl.setColor(color);
             repl.setState("Game");
             return String.format("%s joined game %s as %s", user, gameID, color);
         }
