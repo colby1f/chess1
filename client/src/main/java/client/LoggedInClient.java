@@ -13,12 +13,12 @@ import java.util.Arrays;
 
 public class LoggedInClient implements Client {
 
-    private final Repl repl;
+    private final UserState userState;
     private final String user;
     private final ServerFacade server;
 
-    public LoggedInClient(Repl repl, String user, String serverUrl) {
-        this.repl = repl;
+    public LoggedInClient(UserState userState, String user, String serverUrl) {
+        this.userState = userState;
         this.user = user;
         server = new ServerFacade(serverUrl);
     }
@@ -55,7 +55,7 @@ public class LoggedInClient implements Client {
 
 
     public String listGames() throws ResponseException {
-        ListGamesResult listGamesResult = server.listGames(repl.getAuthToken());
+        ListGamesResult listGamesResult = server.listGames(userState.getAuthToken());
         StringBuilder gameList = new StringBuilder();
         for (GameData game : listGamesResult.games()) {
             gameList.append(game.gameID())
@@ -74,7 +74,7 @@ public class LoggedInClient implements Client {
 
     public String createGame(String... params) throws ResponseException {
         if (params.length == 1) {
-            CreateGameResult createGameResult = server.createGame(new CreateGameRequest(params[0]), repl.getAuthToken());
+            CreateGameResult createGameResult = server.createGame(new CreateGameRequest(params[0]), userState.getAuthToken());
             return String.format("Created game %s. Game ID: %d", params[0], createGameResult.gameID());
         }
         throw new ResponseException(400, "Expected: <game name>");
@@ -100,12 +100,12 @@ public class LoggedInClient implements Client {
                 throw new ResponseException(400, "Game ID must be a number");
             }
 
-            GameData gameData = server.joinGame(new JoinGameRequest(color, gameID), repl.getAuthToken());
+            GameData gameData = server.joinGame(new JoinGameRequest(color, gameID), userState.getAuthToken());
             ChessBoardPrinter chessBoardPrinter = new ChessBoardPrinter(gameData.game(), color);
             chessBoardPrinter.printChessBoard();
-            repl.setGame(gameData);
-            repl.setColor(color);
-            repl.setState("Game");
+            userState.setGame(gameData);
+            userState.setColor(color);
+            userState.setState("Game");
             return String.format("%s joined game %s as %s", user, gameID, color);
         }
         throw new ResponseException(400, "Expected: <game ID> <color>");
@@ -122,7 +122,7 @@ public class LoggedInClient implements Client {
                 throw new ResponseException(400, "Game ID must be a number");
             }
 
-            ListGamesResult listGamesResult = server.watchGame(repl.getAuthToken());
+            ListGamesResult listGamesResult = server.watchGame(userState.getAuthToken());
             if (listGamesResult == null) {
                 throw new ResponseException(400, "Game does not exist");
             }
@@ -147,10 +147,10 @@ public class LoggedInClient implements Client {
 
 
     public String logout() throws ResponseException {
-        server.logout(repl.getAuthToken());
-        repl.setState("Logged Out");
-        repl.setUser(null);
-        repl.setAuthToken(null);
+        server.logout(userState.getAuthToken());
+        userState.setState("Logged Out");
+        userState.setUser(null);
+        userState.setAuthToken(null);
         return String.format("%s logged out", user);
     }
 

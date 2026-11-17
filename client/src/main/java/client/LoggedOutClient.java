@@ -9,11 +9,11 @@ import service.*;
 
 public class LoggedOutClient implements Client {
 
-    private final Repl repl;
+    private final UserState userState;
     private final ServerFacade server;
 
-    public LoggedOutClient(Repl repl, String serverUrl) {
-        this.repl = repl;
+    public LoggedOutClient(UserState userState, String serverUrl) {
+        this.userState = userState;
         server = new ServerFacade(serverUrl);
     }
 
@@ -49,9 +49,9 @@ public class LoggedOutClient implements Client {
     public String login(String... params) throws ResponseException {
         if (params.length == 2) {
             LoginResult loginResult = server.login(new LoginRequest(params[0], params[1]));
-            repl.setUser(loginResult.username());
-            repl.setAuthToken(loginResult.authToken());
-            repl.setState("Logged In");
+            userState.setUser(loginResult.username());
+            userState.setAuthToken(loginResult.authToken());
+            userState.setState("Logged In");
             return String.format("Logged in as %s", loginResult.username());
         }
         throw new ResponseException(400, "Expected: <username> <password>");
@@ -61,9 +61,9 @@ public class LoggedOutClient implements Client {
     public String register(String... params) throws ResponseException {
         if (params.length == 3) {
             RegisterResult registerResult = server.register(new RegisterRequest(params[0], params[1], params[2]));
-            repl.setUser(registerResult.username());
-            repl.setAuthToken(registerResult.authToken());
-            repl.setState("Logged In");
+            userState.setUser(registerResult.username());
+            userState.setAuthToken(registerResult.authToken());
+            userState.setState("Logged In");
             return String.format("New user registered: %s", registerResult.username());
         }
         throw new ResponseException(400, "Expected: <username> <password> <email>");

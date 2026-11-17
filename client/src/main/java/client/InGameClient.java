@@ -7,12 +7,12 @@ import java.util.Arrays;
 
 public class InGameClient implements Client {
 
-    private final Repl repl;
+    private final UserState userState;
     private final String user;
     private final ServerFacade server;
 
-    public InGameClient(Repl repl, String user, String serverUrl) {
-        this.repl = repl;
+    public InGameClient(UserState userState, String user, String serverUrl) {
+        this.userState = userState;
         this.user = user;
         server = new ServerFacade(serverUrl);
     }
@@ -67,7 +67,7 @@ public class InGameClient implements Client {
 
 
     public String redraw() {
-        ChessBoardPrinter chessBoardPrinter = new ChessBoardPrinter(repl.getGame().game(), repl.getColor());
+        ChessBoardPrinter chessBoardPrinter = new ChessBoardPrinter(userState.getGame().game(), userState.getColor());
         chessBoardPrinter.printChessBoard();
         return "Current Board";
     }
@@ -79,10 +79,10 @@ public class InGameClient implements Client {
 
 
     public String leaveGame() throws ResponseException {
-        server.leaveGame(repl.getAuthToken());
-        repl.setState("Logged In");
-        repl.setColor(null);
-        repl.setGame(null);
+        server.leaveGame(userState.getAuthToken());
+        userState.setState("Logged In");
+        userState.setColor(null);
+        userState.setGame(null);
         return String.format("%s left the game", user);
     }
 
