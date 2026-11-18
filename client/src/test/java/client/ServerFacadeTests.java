@@ -1,5 +1,6 @@
 package client;
 
+import chess.ChessGame;
 import org.junit.jupiter.api.*;
 import server.ResponseException;
 import server.Server;
@@ -88,4 +89,41 @@ public class ServerFacadeTests {
         ListGamesResult listGamesResult = facade.listGames(registerResult.authToken());
         assert (listGamesResult.games().getFirst().gameID() == createGameResult.gameID());
     }
+
+    @Test
+    public void joinGamePositive() throws ResponseException {
+        RegisterRequest registerRequest = new RegisterRequest("Darrow", "Reaper", "Darrow@mars.com");
+        RegisterResult registerResult = facade.register(registerRequest);
+
+        CreateGameRequest createGameRequest = new CreateGameRequest("institute");
+        CreateGameResult createGameResult = facade.createGame(createGameRequest, registerResult.authToken());
+
+        JoinGameRequest joinGameRequest = new JoinGameRequest(ChessGame.TeamColor.WHITE, createGameResult.gameID());
+        facade.joinGame(joinGameRequest, registerResult.authToken());
+
+        ListGamesResult listGamesResult = facade.listGames(registerResult.authToken());
+
+        assert (Objects.equals(listGamesResult.games().getFirst().whiteUsername(), "Darrow"));
+    }
+
+
+    @Test
+    public void joinGameNegative() throws ResponseException {
+        RegisterRequest registerRequest = new RegisterRequest("Darrow", "Reaper", "Darrow@mars.com");
+        RegisterResult registerResult = facade.register(registerRequest);
+
+        CreateGameRequest createGameRequest = new CreateGameRequest("institute");
+        facade.createGame(createGameRequest, registerResult.authToken());
+
+        JoinGameRequest joinGameRequest = new JoinGameRequest(ChessGame.TeamColor.WHITE, 10);
+
+        assertThrows(ResponseException.class, () -> facade.joinGame(joinGameRequest, registerResult.authToken()));
+    }
+
+
+
+
+
+
+
 }
