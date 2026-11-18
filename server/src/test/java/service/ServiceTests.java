@@ -4,7 +4,6 @@ import chess.ChessGame;
 import dataaccess.*;
 import model.*;
 import org.junit.jupiter.api.Test;
-import resultsAndRequests.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 

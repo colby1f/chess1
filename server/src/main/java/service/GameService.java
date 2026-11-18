@@ -3,10 +3,10 @@ package service;
 import chess.ChessGame;
 import dataaccess.*;
 import model.GameData;
-import resultsAndRequests.CreateGameRequest;
-import resultsAndRequests.CreateGameResult;
-import resultsAndRequests.JoinGameRequest;
-import resultsAndRequests.ListGamesResult;
+import resultsandrequests.CreateGameRequest;
+import resultsandrequests.CreateGameResult;
+import resultsandrequests.JoinGameRequest;
+import resultsandrequests.ListGamesResult;
 
 import java.util.ArrayList;
 

@@ -14,8 +14,8 @@ public class ChessBoardPrinter {
 
     ChessBoard board;
     ChessGame.TeamColor color;
-    ArrayList<String> TOP_BOTTOM_BOARDER = new ArrayList<>(List.of(" ", "  a ", " b  ", " c  ", " d ", " e  ", " f  ", " g  ", "h  ", " "));
-    ArrayList<String> SIDE_BOARDER = new ArrayList<>(List.of(" 8  ", " 7  ", " 6  ", " 5  ", " 4  ", " 3  ", " 2  ", " 1  "));
+    ArrayList<String> topBottomBoarder = new ArrayList<>(List.of(" ", "  a ", " b  ", " c  ", " d ", " e  ", " f  ", " g  ", "h  ", " "));
+    ArrayList<String> sideBoarder = new ArrayList<>(List.of(" 8  ", " 7  ", " 6  ", " 5  ", " 4  ", " 3  ", " 2  ", " 1  "));
 
     public ChessBoardPrinter(ChessGame chessGame, ChessGame.TeamColor color) {
         this.board = chessGame.getBoard();
@@ -42,7 +42,7 @@ public class ChessBoardPrinter {
 
     private void printRow(PrintStream out, int row) {
 
-        printBoarderSquare(out, row, SIDE_BOARDER);
+        printBoarderSquare(out, row, sideBoarder);
 
         for (int col = 1; col <= 8; col++) {
 
@@ -64,7 +64,7 @@ public class ChessBoardPrinter {
             }
         }
 
-        printBoarderSquare(out, row, SIDE_BOARDER);
+        printBoarderSquare(out, row, sideBoarder);
 
     }
 
@@ -72,7 +72,7 @@ public class ChessBoardPrinter {
     private void printBoarderTopBottom(PrintStream out) {
 
         for (int col = 1; col <= 10; col++) {
-            printBoarderSquare(out, col, TOP_BOTTOM_BOARDER);
+            printBoarderSquare(out, col, topBottomBoarder);
         }
 
         out.print(EscapeSequences.RESET_BG_COLOR);

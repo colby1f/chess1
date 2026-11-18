@@ -3,7 +3,6 @@ package client;
 import com.google.gson.Gson;
 
 import model.*;
-import resultsAndRequests.*;
 
 import java.net.*;
 import java.net.http.*;

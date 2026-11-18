@@ -2,10 +2,10 @@ package client;
 
 import chess.ChessGame;
 import model.*;
-import resultsAndRequests.CreateGameRequest;
-import resultsAndRequests.CreateGameResult;
-import resultsAndRequests.JoinGameRequest;
-import resultsAndRequests.ListGamesResult;
+import resultsandrequests.CreateGameRequest;
+import resultsandrequests.CreateGameResult;
+import resultsandrequests.JoinGameRequest;
+import resultsandrequests.ListGamesResult;
 
 import java.util.Arrays;
 
