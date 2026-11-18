@@ -6,6 +6,7 @@ import dataaccess.sql.MySqlDataAccess;
 import io.javalin.*;
 import io.javalin.http.Context;
 import model.GameData;
+import resultsandrequests.*;
 import service.*;
 
 import java.util.Map;
