@@ -6,6 +6,7 @@ import ui.EscapeSequences;
 import java.io.PrintStream;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
@@ -84,10 +85,11 @@ public class ChessBoardPrinter {
         out.print(EscapeSequences.SET_TEXT_COLOR_RED);
 
 
-        String value = list.get(pos - 1);
+        ArrayList<String> listCopy = new ArrayList<>(list);
         if (color == ChessGame.TeamColor.BLACK) {
-            value = list.get(pos + 1);
+            Collections.reverse(listCopy);
         }
+        String value = listCopy.get(pos - 1);
 
 
         if (Objects.equals(value, " ")) {
