@@ -27,11 +27,9 @@ public class LoggedInClient implements Client {
         try {
             String[] tokens = input.toLowerCase().split(" ");
 
-            String command;
+            String command = "help";
             if (tokens.length > 0) {
                 command = tokens[0];
-            } else {
-                command = "help";
             }
 
             String[] params = Arrays.copyOfRange(tokens, 1, tokens.length);
@@ -42,7 +40,6 @@ public class LoggedInClient implements Client {
                 case "join" -> joinGame(params);
                 case "watch" -> watchGame(params);
                 case "logout" -> logout();
-                case "admin_clear" -> clear();
                 default -> help();
             };
         } catch (ResponseException e) {
@@ -151,15 +148,6 @@ public class LoggedInClient implements Client {
         userState.setUser(null);
         userState.setAuthToken(null);
         return String.format("%s logged out", user);
-    }
-
-
-    public String clear() throws ResponseException {
-        server.clear();
-        userState.setState("Logged Out");
-        userState.setUser(null);
-        userState.setAuthToken(null);
-        return "Data Cleared";
     }
 
 
