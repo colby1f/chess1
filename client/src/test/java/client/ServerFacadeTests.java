@@ -2,8 +2,8 @@ package client;
 
 import chess.ChessGame;
 import org.junit.jupiter.api.*;
+import resultsAndRequests.*;
 import server.Server;
-import service.*;
 
 import java.util.Objects;
 

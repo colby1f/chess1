@@ -2,7 +2,10 @@ package client;
 
 import java.util.Arrays;
 
-import service.*;
+import resultsAndRequests.LoginRequest;
+import resultsAndRequests.LoginResult;
+import resultsAndRequests.RegisterRequest;
+import resultsAndRequests.RegisterResult;
 
 
 public class LoggedOutClient implements Client {
