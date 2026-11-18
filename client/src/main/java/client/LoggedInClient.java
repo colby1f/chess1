@@ -91,10 +91,15 @@ public class LoggedInClient implements Client {
             try {
                 gameID = Integer.parseInt(params[0]);
             } catch (Exception e) {
-                throw new ResponseException(400, "Game ID must be a number");
+                throw new ResponseException(400, "Game number must be a number");
             }
 
             GameData gameData = server.joinGame(new JoinGameRequest(color, gameID), userState.getAuthToken());
+
+            if (gameData == null) {
+                throw new ResponseException(400, "Game does not exist");
+            }
+
             ChessBoardPrinter chessBoardPrinter = new ChessBoardPrinter(gameData.game(), color);
             chessBoardPrinter.printChessBoard();
             userState.setGame(gameData);
@@ -102,7 +107,7 @@ public class LoggedInClient implements Client {
             userState.setState("Game");
             return String.format("%s joined game %s as %s", user, gameID, color);
         }
-        throw new ResponseException(400, "Expected: <game ID> <color>");
+        throw new ResponseException(400, "Expected: <game number> <color>");
     }
 
 
@@ -113,7 +118,7 @@ public class LoggedInClient implements Client {
             try {
                 gameID = Integer.parseInt(params[0]);
             } catch (Exception e) {
-                throw new ResponseException(400, "Game ID must be a number");
+                throw new ResponseException(400, "Game number must be a number");
             }
 
             ListGamesResult listGamesResult = server.watchGame(userState.getAuthToken());
@@ -129,14 +134,14 @@ public class LoggedInClient implements Client {
             }
 
             if (correct_game == null) {
-                throw new ResponseException(400, "Game Does not exist");
+                throw new ResponseException(400, "Game does not exist");
             }
 
             ChessBoardPrinter chessBoardPrinter = new ChessBoardPrinter(correct_game.game(), ChessGame.TeamColor.WHITE);
             chessBoardPrinter.printChessBoard();
             return String.format("%s is now watching game %s", user, correct_game.gameName());
         }
-        throw new ResponseException(400, "Expected: <game ID>");
+        throw new ResponseException(400, "Expected: <game number>");
     }
 
 
@@ -153,8 +158,8 @@ public class LoggedInClient implements Client {
         return """
                 - List Games: "list"
                 - Create Game: "create" <game name>
-                - Join Game: "join" <game ID> <color>
-                - Watch Game: "watch" <game ID>
+                - Join Game: "join" <game number> <color>
+                - Watch Game: "watch" <game number>
                 - List of Commands: "help"
                 - Logout: "logout"
                 """;
