@@ -42,8 +42,6 @@ public class LoggedInClient implements Client {
                 case "logout" -> logout();
                 default -> help();
             };
-        } catch (ResponseException e) {
-            return e.getCode() + " " + e.getMessage();
         } catch (Exception e) {
             return e.getMessage();
         }

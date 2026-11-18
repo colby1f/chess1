@@ -37,8 +37,6 @@ public class InGameClient implements Client {
                 case "leave" -> leaveGame();
                 default -> help();
             };
-        } catch (ResponseException e) {
-            return e.getCode() + " " + e.getMessage();
         } catch (Exception e) {
             return e.getMessage();
         }
