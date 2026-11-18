@@ -2,9 +2,7 @@ package client;
 
 import chess.ChessGame;
 import org.junit.jupiter.api.*;
-import server.ResponseException;
 import server.Server;
-import server.ServerFacade;
 import service.*;
 
 import java.util.Objects;

@@ -2,8 +2,6 @@ package client;
 
 import java.util.Arrays;
 
-import server.ResponseException;
-import server.ServerFacade;
 import service.*;
 
 

@@ -1,8 +1,5 @@
 package client;
 
-import server.ResponseException;
-import server.ServerFacade;
-
 import java.util.Arrays;
 
 public class InGameClient implements Client {

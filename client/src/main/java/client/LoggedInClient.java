@@ -2,8 +2,6 @@ package client;
 
 import chess.ChessGame;
 import model.*;
-import server.ResponseException;
-import server.ServerFacade;
 import service.CreateGameRequest;
 import service.CreateGameResult;
 import service.JoinGameRequest;
