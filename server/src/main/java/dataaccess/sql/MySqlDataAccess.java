@@ -201,7 +201,7 @@ public class MySqlDataAccess implements DataAccess {
     }
 
     @Override
-    public void addPlayer(String authToken, ChessGame.TeamColor playerColor, Integer gameID) throws AlreadyTakenException {
+    public void addPlayer(String authToken, ChessGame.TeamColor playerColor, Integer gameID) throws AlreadyTakenException, DataAccessException {
         try (var conn = DatabaseManager.getConnection()) {
 
             var statement1 = "SELECT whiteUsername, blackUsername FROM game WHERE gameID = ?";
@@ -231,7 +231,7 @@ public class MySqlDataAccess implements DataAccess {
                 ps.executeUpdate();
             }
         } catch (DataAccessException | SQLException e) {
-            throw new RuntimeException(e.getMessage());
+            throw new DataAccessException("Error: Game does not exist");
         }
     }
 
