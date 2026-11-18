@@ -4,10 +4,7 @@ import org.junit.jupiter.api.*;
 import server.ResponseException;
 import server.Server;
 import server.ServerFacade;
-import service.LoginRequest;
-import service.LoginResult;
-import service.RegisterRequest;
-import service.RegisterResult;
+import service.*;
 
 import java.util.Objects;
 
@@ -48,6 +45,8 @@ public class ServerFacadeTests {
         RegisterRequest registerRequest = new RegisterRequest("Darrow", "Reaper", "Darrow@mars.com");
         RegisterResult registerResult = facade.register(registerRequest);
 
+        facade.logout(registerResult.authToken());
+
         LoginRequest loginRequest = new LoginRequest(registerResult.username(), registerRequest.password());
         LoginResult loginResult = facade.login(loginRequest);
 
@@ -58,6 +57,8 @@ public class ServerFacadeTests {
     public void loginNegative() throws ResponseException {
         RegisterRequest registerRequest = new RegisterRequest("Darrow", "Reaper", "Darrow@mars.com");
         RegisterResult registerResult = facade.register(registerRequest);
+
+        facade.logout(registerResult.authToken());
 
         LoginRequest loginRequest = new LoginRequest(registerResult.username(), "wrongPassword");
         assertThrows(ResponseException.class, () -> facade.login(loginRequest));
@@ -73,5 +74,18 @@ public class ServerFacadeTests {
 
         LoginRequest loginRequest = new LoginRequest(registerResult.username(), registerRequest.password());
         assertThrows(ResponseException.class, () -> facade.login(loginRequest));
+    }
+
+
+    @Test
+    public void listGamesPositive() throws ResponseException {
+        RegisterRequest registerRequest = new RegisterRequest("Darrow", "Reaper", "Darrow@mars.com");
+        RegisterResult registerResult = facade.register(registerRequest);
+
+        CreateGameRequest createGameRequest = new CreateGameRequest("institute");
+        CreateGameResult createGameResult = facade.createGame(createGameRequest, registerResult.authToken());
+
+        ListGamesResult listGamesResult = facade.listGames(registerResult.authToken());
+        assert (listGamesResult.games().getFirst().gameID() == createGameResult.gameID());
     }
 }
