@@ -119,11 +119,4 @@ public class ServerFacadeTests {
 
         assertThrows(ResponseException.class, () -> facade.joinGame(joinGameRequest, registerResult.authToken()));
     }
-
-
-
-
-
-
-
 }
