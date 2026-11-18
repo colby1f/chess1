@@ -5,13 +5,16 @@ import ui.EscapeSequences;
 
 import java.io.PrintStream;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
 
 public class ChessBoardPrinter {
 
     ChessBoard board;
     ChessGame.TeamColor color;
-    int SQUARE_SIZE = 3;
-    int PIECE_POSITION = 2;
+    ArrayList<String> TOP_BOTTOM_BOARDER = new ArrayList<>(List.of(" ", "  a ", " b  ", " c  ", " d ", " e  ", " f  ", " g  ", "h  ", " "));
+    ArrayList<String> SIDE_BOARDER = new ArrayList<>(List.of(" 8  ", " 7  ", " 6  ", " 5  ", " 4  ", " 3  ", " 2  ", " 1  "));
 
     public ChessBoardPrinter(ChessGame chessGame, ChessGame.TeamColor color) {
         this.board = chessGame.getBoard();
@@ -26,46 +29,80 @@ public class ChessBoardPrinter {
 
 
     private void printSquares(PrintStream out) {
-        for (int row = 8; row >= 1; row--) {
+
+        printBoarderTopBottom(out);
+        for (int row = 1; row <= 8; row++) {
             printRow(out, row);
             out.println();
         }
+        printBoarderTopBottom(out);
     }
 
 
     private void printRow(PrintStream out, int row) {
-        for (int dim = 1; dim <= SQUARE_SIZE; dim++) {
 
-            for (int col = 1; col <= 8; col++) {
+        printBoarderSquare(out, row, SIDE_BOARDER);
 
-                int newRow = row;
-                int newCol = col;
+        for (int col = 1; col <= 8; col++) {
 
-                if (color == ChessGame.TeamColor.BLACK) {
-                    newRow = invert(row);
-                    newCol = invert(col);
-                }
-                setSquareColor(newRow, newCol, out);
+            int newRow = invert(row);
+            int newCol = col;
 
-                ChessPiece chessPiece = board.getPiece(new ChessPosition(newRow, newCol));
-                if (dim == PIECE_POSITION && chessPiece != null) {
-                    printPiece(chessPiece, newRow, newCol, out);
-                } else {
-                    out.print(EscapeSequences.EMPTY.repeat(SQUARE_SIZE));
-                    out.print(EscapeSequences.RESET_BG_COLOR);
-                }
+            if (color == ChessGame.TeamColor.BLACK) {
+                newRow = row;
+                newCol = invert(col);
             }
+            setSquareColor(newRow, newCol, out);
 
-            if (dim != SQUARE_SIZE) {
-                out.println();
+            ChessPiece chessPiece = board.getPiece(new ChessPosition(newRow, newCol));
+            if (chessPiece != null) {
+                printPiece(chessPiece, out);
+            } else {
+                out.print(EscapeSequences.EMPTY);
+                out.print(EscapeSequences.RESET_BG_COLOR);
             }
         }
+
+        printBoarderSquare(out, row, SIDE_BOARDER);
+
     }
 
-    private void printPiece(ChessPiece chessPiece, int row, int col, PrintStream out) {
-        String pieceString = getPieceString(chessPiece);
 
-        out.print(EscapeSequences.EMPTY);
+    private void printBoarderTopBottom(PrintStream out) {
+
+        for (int col = 1; col <= 10; col++) {
+            printBoarderSquare(out, col, TOP_BOTTOM_BOARDER);
+        }
+
+        out.print(EscapeSequences.RESET_BG_COLOR);
+        out.println();
+    }
+
+
+    private void printBoarderSquare(PrintStream out, int pos, ArrayList<String> list) {
+        out.print(EscapeSequences.SET_BG_COLOR_BLACK);
+        out.print(EscapeSequences.SET_TEXT_COLOR_RED);
+
+
+        String value = list.get(pos - 1);
+        if (color == ChessGame.TeamColor.BLACK) {
+            value = list.get(pos + 1);
+        }
+
+
+        if (Objects.equals(value, " ")) {
+            out.print(EscapeSequences.EMPTY);
+        } else {
+            out.print(value);
+        }
+
+        out.print(EscapeSequences.RESET_BG_COLOR);
+    }
+
+
+    private void printPiece(ChessPiece chessPiece, PrintStream out) {
+
+        String pieceString = getPieceString(chessPiece);
 
         if (chessPiece.getTeamColor() == ChessGame.TeamColor.WHITE) {
             out.print(EscapeSequences.SET_TEXT_COLOR_BLUE + pieceString);
@@ -73,8 +110,6 @@ public class ChessBoardPrinter {
             out.print(EscapeSequences.SET_TEXT_COLOR_BLACK + pieceString);
         }
 
-        setSquareColor(row, col, out);
-        out.print(EscapeSequences.EMPTY);
         out.print(EscapeSequences.RESET_BG_COLOR);
     }
 
