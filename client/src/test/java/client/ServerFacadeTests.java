@@ -1,7 +1,5 @@
 package client;
 
-import chess.ChessGame;
-import dataaccess.AlreadyTakenException;
 import org.junit.jupiter.api.*;
 import server.ResponseException;
 import server.Server;
@@ -53,7 +51,7 @@ public class ServerFacadeTests {
         LoginRequest loginRequest = new LoginRequest(registerResult.username(), registerRequest.password());
         LoginResult loginResult = facade.login(loginRequest);
 
-        assert(Objects.equals(loginResult.username(), "Darrow"));
+        assert (Objects.equals(loginResult.username(), "Darrow"));
     }
 
     @Test
@@ -65,4 +63,15 @@ public class ServerFacadeTests {
         assertThrows(ResponseException.class, () -> facade.login(loginRequest));
     }
 
+
+    @Test
+    public void clearPositive() throws ResponseException {
+        RegisterRequest registerRequest = new RegisterRequest("Darrow", "Reaper", "Darrow@mars.com");
+        RegisterResult registerResult = facade.register(registerRequest);
+
+        facade.clear();
+
+        LoginRequest loginRequest = new LoginRequest(registerResult.username(), registerRequest.password());
+        assertThrows(ResponseException.class, () -> facade.login(loginRequest));
+    }
 }
