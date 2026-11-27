@@ -7,6 +7,8 @@ import io.javalin.*;
 import io.javalin.http.Context;
 import model.GameData;
 import resultsandrequests.*;
+import server.webSocket.ConnectionManager;
+import server.webSocket.WebSocketHandler;
 import service.*;
 
 import java.util.Map;
@@ -32,6 +34,7 @@ public class Server {
         generalService = new GeneralService(dataAccess);
         userService = new UserService(dataAccess);
         gameService = new GameService(dataAccess);
+        WebSocketHandler webSocketHandler = new WebSocketHandler(new ConnectionManager());
 
         javalin = Javalin.create(
                 config -> config.staticFiles.add("web"));
@@ -43,6 +46,11 @@ public class Server {
         javalin.get("/game", this::listGamesHandler);
         javalin.post("/game", this::createGameHandler);
         javalin.put("/game", this::joinGameHandler);
+        javalin.ws("/ws", ws -> {
+            ws.onConnect(webSocketHandler);
+            ws.onMessage(webSocketHandler);
+            ws.onClose(webSocketHandler);
+        });
 
     }
 
