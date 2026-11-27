@@ -4,6 +4,7 @@
     <option name="disabledModuleNames">
       <set>
         <option value="client" />
+        <option value="server" />
       </set>
     </option>
   </component>
