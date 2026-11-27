@@ -11,8 +11,8 @@ public class ConnectionManager {
 
     private final Map<Connection, String> connections = new ConcurrentHashMap<>();
 
-    public void addConnection(Connection connection, String username) {
-        connections.put(connection, username);
+    public void addConnection(Connection connection, String authToken) {
+        connections.put(connection, authToken);
     }
 
 
