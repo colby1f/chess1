@@ -7,15 +7,15 @@ import java.util.concurrent.ConcurrentHashMap;
 
 public class ConnectionManager {
 
-    private final Map<Session, String> connections = new ConcurrentHashMap<>();
+    private final Map<Connection, String> connections = new ConcurrentHashMap<>();
 
-    public void addConnection(Session session, String username) {
-        connections.put(session, username);
+    public void addConnection(Connection connection, String username) {
+        connections.put(connection, username);
     }
 
 
-    public String remove(Session session) {
-        return connections.remove(session);
+    public String remove(Connection connection) {
+        return connections.remove(connection);
     }
 
 }
