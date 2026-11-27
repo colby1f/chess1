@@ -4,9 +4,10 @@ import com.google.gson.Gson;
 import io.javalin.websocket.WsCloseContext;
 import io.javalin.websocket.WsConnectContext;
 import io.javalin.websocket.WsMessageContext;
-import jdk.jshell.spi.ExecutionControl;
-import org.eclipse.jetty.server.Authentication;
 import websocket.commands.UserGameCommand;
+import jakarta.websocket.*;
+import websocket.messages.Notification;
+import websocket.messages.ServerMessage;
 
 public class WebSocketHandler {
 
@@ -35,7 +36,12 @@ public class WebSocketHandler {
     }
 
 
-
+    private void connect(String username, Connection connection) {
+        connections.addConnection(connection, username);
+        var message = String.format("%s joined in the game", username);
+        var notification = new Notification(message);
+        connections.messageGame(connection, connection.gameID(), notification);
+    }
 
 
 }
