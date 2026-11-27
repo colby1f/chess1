@@ -4,7 +4,7 @@ import org.eclipse.jetty.websocket.api.Session;
 
 import java.io.IOException;
 
-public record Connection(Session session, int gameID) {
+public record Connection(Session session, String authToken, int gameID) {
 
     public boolean isOpen() {
         return session.isOpen();
