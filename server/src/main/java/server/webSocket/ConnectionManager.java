@@ -20,6 +20,11 @@ public class ConnectionManager {
         return connections.remove(connection);
     }
 
+
+    public void messageGame(int gameID, Notification notification) {
+        messageGame(null, gameID, notification);
+    }
+
     public void messageGame(Connection excludeConnection, int gameID, Notification notification) {
         String message = notification.getNotification();
         for (Connection connection : connections.keySet()) {
