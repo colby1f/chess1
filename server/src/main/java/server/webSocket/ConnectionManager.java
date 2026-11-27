@@ -26,7 +26,7 @@ public class ConnectionManager {
     }
 
     public void messageGame(Connection excludeConnection, int gameID, Notification notification) {
-        String message = notification.getNotification();
+        String message = notification.getMessage();
         for (Connection connection : connections.keySet()) {
             if (connection.gameID() != gameID) {
                 continue;
