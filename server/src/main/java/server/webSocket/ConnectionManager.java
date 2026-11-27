@@ -1,6 +1,6 @@
 package server.webSocket;
 
-import org.eclipse.jetty.websocket.api.Session;
+import jakarta.websocket.*;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
