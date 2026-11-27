@@ -1,7 +1,9 @@
 package server.webSocket;
 
 import jakarta.websocket.*;
+import websocket.messages.*;
 
+import java.io.IOException;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -16,6 +18,27 @@ public class ConnectionManager {
 
     public String remove(Connection connection) {
         return connections.remove(connection);
+    }
+
+    public void messageGame(Connection excludeConnection, int gameID, Notification notification) {
+        String message = notification.getNotification();
+        for (Connection connection : connections.keySet()) {
+            if (connection.gameID() != gameID) {
+                continue;
+            }
+            if (connection.equals(excludeConnection)) {
+                continue;
+            }
+            if (!connection.isOpen()) {
+                connections.remove(connection);
+                continue;
+            }
+            try {
+                connection.send(message);
+            } catch (IOException e) {
+                connections.remove(connection);
+            }
+        }
     }
 
 }
