@@ -29,8 +29,8 @@ public class Repl {
             } catch (Throwable e) {
                 System.out.print(e.getMessage());
             }
+            System.out.println();
         }
-        System.out.println();
     }
 
 
